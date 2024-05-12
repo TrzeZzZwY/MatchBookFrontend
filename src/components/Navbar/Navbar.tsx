@@ -1,9 +1,24 @@
-// Navbar.jsx
+import HamburgerMenu from './HamburgerMenu';
+import './Navbar.css';
 
 export default function Navbar() {
   return (
-    <nav className="navbar">
-      <h1>Navbar</h1>
-    </nav>
+    <div className="skew-flex nav-skew">
+      <div className="skew-flex info-skew">
+        <div className="skew-text">
+          <a className="nav-text" href="#">
+            Test
+          </a>{' '}
+          &nbsp;{' '}
+          <a className="nav-text" href="#">
+            Test2
+          </a>
+        </div>
+      </div>
+
+      <div className="hamburger-menu">
+        <HamburgerMenu />
+      </div>
+    </div>
   );
 }
