@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import anime from 'animejs/lib/anime.es.js';
-import './header.css';
+import './header.scss';
 
 const Grid: React.FC = () => {
     const [columns, setColumns] = useState(Math.floor(document.documentElement.clientWidth / 50));

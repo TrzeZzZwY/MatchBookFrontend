@@ -8,7 +8,7 @@ const App = () => {
     <>
       <Navbar />
       <Header />
-      <Tiles />
+      {/* <Tiles /> */} {/* Test concept, propably to delete */}
     </>
   );
 };

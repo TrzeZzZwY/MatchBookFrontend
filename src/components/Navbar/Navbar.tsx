@@ -1,5 +1,5 @@
 import HamburgerMenu from './HamburgerMenu';
-import './Navbar.css';
+import './Navbar.scss';
 
 export default function Navbar() {
   return (
