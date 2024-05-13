@@ -1,9 +1,28 @@
-// Header.jsx
 import React from 'react';
+import { useSpring, animated } from '@react-spring/web';
 import './Header.scss';
 import '../_animations.scss';
 
 export default function Header() {
+  //animmation for header
+  const [headerAnimation, headerApi] = useSpring(() => ({
+    from: { opacity: 0, translateY: -20 },
+    to: { opacity: 1, translateY: 0 },
+    delay: 100,
+  }));
+
+  const [paragraphAnimation, paragraphApi] = useSpring(() => ({
+    from: { opacity: 0, translateY: -20 },
+    to: { opacity: 1, translateY: 0 },
+    delay: 300,
+  }));
+
+  const [buttonAnimation, buttonApi] = useSpring(() => ({
+    from: { opacity: 0, translateY: -20 },
+    to: { opacity: 1, translateY: 0 },
+    delay: 500,
+  }));
+
   return (
     <>
       <header className="fullScreenImg " id="home">
@@ -11,20 +30,29 @@ export default function Header() {
       </header>
 
       <div className="hero-text p-2">
-        <h1 data-aos="fade-up" data-aos-delay="50">
+        <animated.h1
+          style={{
+            ...headerAnimation,
+          }}
+        >
           Poznaj Match<span className="blue-text">Book</span>
-        </h1>
-        <p data-aos="fade-up" data-aos-delay="150">
+        </animated.h1>
+        <animated.p
+          style={{
+            ...paragraphAnimation,
+          }}
+        >
           Aplikację, która pomoże Ci znaleźć idealną książkę dla Ciebie
-        </p>
-        <a
+        </animated.p>
+        <animated.a
           href="#aboutus"
           className={`custom-button mb-2 me-2 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800`}
-          data-aos="fade-up"
-          data-aos-delay="250"
+          style={{
+            ...buttonAnimation,
+          }}
         >
           Dowiedz się więcej
-        </a>{' '}
+        </animated.a>
         <a href="#aboutus">
           <svg
             xmlns="http://www.w3.org/2000/svg"
