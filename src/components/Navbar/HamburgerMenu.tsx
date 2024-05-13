@@ -9,14 +9,16 @@ export default function HambugerMenu() {
   };
 
   return (
-    <div
-      className={classNames(`tham tham-e-arrow-turn tham-w-12`, {
-        'tham-active': opened,
-      })}
-      onClick={toggleMenu}
-    >
-      <div className="tham-box">
-        <div className="tham-inner" />
+    <div className="hamburger-menu">
+      <div
+        className={classNames(`tham tham-e-arrow-turn tham-w-12`, {
+          'tham-active': opened,
+        })}
+        onClick={toggleMenu}
+      >
+        <div className="tham-box">
+          <div className="tham-inner" />
+        </div>
       </div>
     </div>
   );

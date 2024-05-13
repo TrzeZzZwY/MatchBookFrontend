@@ -1,18 +1,49 @@
+@import '../_colors.scss';
+
 .nav-skew {
   position: fixed;
   top: 0px;
   right: 0px;
   height: 200px;
-  z-index: 999999;
-  width: 445px;
+  z-index: 100;
+  width: 100%;
   flex-direction: column;
   display: flex;
   text-align: left;
+
+  .navbar-brand {
+    position: absolute;
+    top: 43px;
+    left: 45px;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+
+    p{
+      display: inline-block;
+    }
+    span {
+      color: $main-color;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .logo-icon {
+      display: inline-block;
+      margin-right: 15px;
+    }
+  }
+  .navbar-brand:hover {
+    span {
+      color: $white;
+    }
+    color: $main-color;
+  }
 }
 
 .nav-skew:before {
   content: '';
-  background: #fff;
+  background: $white;
   position: absolute;
   top: 0;
   right: -300px;
@@ -54,4 +85,31 @@
   z-index: 99999;
   top: 50px;
   right: 45px;
+
+  .tham-inner,
+  .tham:before,
+  .tham:after {
+    background-color: $black;
+  }
+}
+
+
+@media screen and (max-width: 524px){
+  .navbar-brand {
+   
+    span,p {
+     display: none !important;
+    }
+
+    .logo-icon {
+      display: inline-block;
+      margin-right: 0;
+    }
+
+    left: 25px !important;
+  }
+
+  .hamburger-menu{
+    right: 25px;
+  }
 }
