@@ -1,23 +1,22 @@
-import React from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import './Header.scss';
 import '../_animations.scss';
 
 export default function Header() {
   //animmation for header
-  const [headerAnimation, headerApi] = useSpring(() => ({
+  const [headerAnimation] = useSpring(() => ({
     from: { opacity: 0, translateY: -20 },
     to: { opacity: 1, translateY: 0 },
     delay: 100,
   }));
 
-  const [paragraphAnimation, paragraphApi] = useSpring(() => ({
+  const [paragraphAnimation] = useSpring(() => ({
     from: { opacity: 0, translateY: -20 },
     to: { opacity: 1, translateY: 0 },
     delay: 300,
   }));
 
-  const [buttonAnimation, buttonApi] = useSpring(() => ({
+  const [buttonAnimation] = useSpring(() => ({
     from: { opacity: 0, translateY: -20 },
     to: { opacity: 1, translateY: 0 },
     delay: 500,

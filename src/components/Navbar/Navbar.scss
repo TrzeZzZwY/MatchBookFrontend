@@ -18,10 +18,10 @@
     font-size: 24px;
     text-transform: uppercase;
     font-weight: 600;
-    transition: all 0.3s ease-in-out;
 
-    p{
+    p {
       display: inline-block;
+      transition: all 0.3s ease-in-out;
     }
     span {
       color: $main-color;
@@ -37,7 +37,9 @@
     span {
       color: $white;
     }
-    color: $main-color;
+    p {
+      color: $main-color;
+    }
   }
 }
 
@@ -93,12 +95,11 @@
   }
 }
 
-
-@media screen and (max-width: 524px){
+@media screen and (max-width: 524px) {
   .navbar-brand {
-   
-    span,p {
-     display: none !important;
+    span,
+    p {
+      display: none !important;
     }
 
     .logo-icon {
@@ -109,7 +110,7 @@
     left: 25px !important;
   }
 
-  .hamburger-menu{
+  .hamburger-menu {
     right: 25px;
   }
 }
