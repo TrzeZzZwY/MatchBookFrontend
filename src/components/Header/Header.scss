@@ -55,24 +55,13 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 3%;
+  bottom: 10%;
   padding: 5px;
   color: $white;
   cursor: pointer;
 }
 .blue-text {
   color: $main-color;
-}
-
-.fa-chevron-down {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 3%;
-  padding: 5px;
-  font-size: 32px;
-  color: $white;
-  cursor: pointer;
 }
 
 .phoneContainer {
@@ -91,7 +80,7 @@
     align-items: center;
     width: 90%;
     height: 90%;
-    min-width: 440px;
+    min-width: 380px;
   }
 
   .bookIcon {
@@ -132,5 +121,9 @@
 
   .hero-img {
     background-image: url('/src/assets/img/book_big.png');
+  }
+
+  .fa-chevron-down {
+    bottom: 3%;
   }
 }

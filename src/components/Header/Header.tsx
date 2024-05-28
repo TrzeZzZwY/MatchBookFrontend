@@ -1,5 +1,6 @@
 import { useSpring, animated } from '@react-spring/web';
 import './Header.scss';
+import '../Section/Section.scss';
 import '../_animations.scss';
 import {
   ChevronDoubleDownIcon,
@@ -22,15 +23,16 @@ export default function Header() {
 
   return (
     <>
-      <header className="fullScreenImg " id="home">
+      <header className="fullScreenImg overflow-hidden" id="home">
         <div className="hero-img kenburns-top"> </div>
       </header>
 
-      <div className="absolute left-0 top-0 flex h-screen w-screen flex-row">
+      <div className="absolute left-0 top-0 flex h-screen w-full flex-row">
         <div className="w-full p-4 md:w-1/2">
-          <div className="hero-text p-2">
+          <div className="hero-text mt-5 p-2 sm:mt-0">
             <h1 className="text-2xl lg:text-3xl xl:text-4xl">
-              Poznaj <span className="text-blue-500">niesamowitą</span> aplikację
+              Poznaj <span className="text-blue-500">niesamowitą</span>{' '}
+              aplikację
             </h1>
             <p className="text-base lg:text-lg xl:text-xl">
               która pomoże Ci znaleźć idealną
@@ -48,9 +50,10 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <a href="#aboutus">
+      <a href="#action">
         <ChevronDoubleDownIcon className="fa-chevron-down bounce-top h-12 w-12" />
       </a>
+      <div className="white-block white-block-left"></div>
     </>
   );
 }
