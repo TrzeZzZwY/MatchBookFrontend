@@ -3,17 +3,18 @@
 @tailwind utilities;
 
 * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-	scroll-padding-top: 72px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
 }
 
 body {
-	font-family: 'Montserrat', sans-serif;
-	color: #fff;
-	height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
+  height: 100vh;
 }

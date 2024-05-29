@@ -46,3 +46,17 @@
     width: 45%;
   }
 }
+
+// manualSection
+.img-container {
+  height: 100%; /* Ensure the container takes the full height of its parent */
+  display: flex; /* Enable flexbox layout */
+  justify-content: flex-end; /* Center the image horizontally */
+}
+
+.img-container img {
+  max-height: 100%; /* Make the image fill the container's height, but don't stretch larger than its original size */
+  max-width: 100%; /* Make the image responsive, don't stretch wider than its original size */
+  width: auto; /* Ensure the image maintains its aspect ratio */
+  height: auto; /* Ensure the image maintains its aspect ratio */
+}

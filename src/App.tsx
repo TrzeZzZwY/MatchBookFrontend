@@ -2,6 +2,7 @@ import Navbar from './components/Navbar/Navbar.tsx';
 import Header from './components/Header/Header.tsx';
 import VideoSection from './components/Sections/VideoSection.tsx';
 import ScreensSection from './components/Sections/ScreensSection.tsx';
+import ManualSection from './components/Sections/ManualSection.tsx';
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       <Header />
       <VideoSection />
       <ScreensSection />
+      <ManualSection/>
     </>
   );
 };
