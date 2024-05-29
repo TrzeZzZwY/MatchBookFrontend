@@ -68,11 +68,11 @@ const ManualSection: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex w-full flex-1 flex-col md:flex-row md:justify-between">
+          <div className="flex w-full flex-1 flex-col md:flex-row md:justify-between ">
             <div className="align-center mx-10 flex flex-col text-center md:flex-1 md:items-start md:text-justify">
               {currentTabContent && (
                 <>
-                  <h2 className="text-2xl font-bold text-gray-800">
+                  <h2 className="mt-5 text-2xl font-bold text-gray-800 md:mt-0">
                     {currentTabContent.title}
                   </h2>
                   <p className="mt-4 text-gray-600">
@@ -82,12 +82,14 @@ const ManualSection: React.FC = () => {
               )}
             </div>
             {currentTabContent && (
-              <div className="img-container w-full flex-1">
+              <div className="img-container order-first w-full flex-1 md:order-none	">
+                <div className="white-block white-block-right md:hidden"></div>
                 <img
                   src={currentTabContent.imgSrc}
                   className="h-auto max-h-full w-full object-cover md:h-full"
                   alt={currentTabContent.title}
                 />
+                <div className="white-block white-block-left md:hidden"></div>
               </div>
             )}
           </div>

@@ -5,7 +5,7 @@
   height: 40px;
   width: 60%;
   background-color: $white;
-
+  z-index: 1;
   &-left {
     bottom: 0;
     left: -50px;
@@ -49,14 +49,32 @@
 
 // manualSection
 .img-container {
-  height: 100%; /* Ensure the container takes the full height of its parent */
-  display: flex; /* Enable flexbox layout */
-  justify-content: flex-end; /* Center the image horizontally */
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  background-attachment: fixed;
+}
+.img-container img {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.7);
+  background-attachment: fixed;
 }
 
-.img-container img {
-  max-height: 100%; /* Make the image fill the container's height, but don't stretch larger than its original size */
-  max-width: 100%; /* Make the image responsive, don't stretch wider than its original size */
-  width: auto; /* Ensure the image maintains its aspect ratio */
-  height: auto; /* Ensure the image maintains its aspect ratio */
+@media (max-width: 768px) {
+  .img-container {
+    position: relative;
+    overflow: hidden;
+    left: -1.25rem;
+    width: 100vw;
+  }
+
+  .img-container img {
+    width: 100%;
+    height: 400px;
+  }
 }
