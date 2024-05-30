@@ -36,6 +36,11 @@ export default defineConfig({
       },
     }),
   ],
+  //192.168.1.36:3000
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

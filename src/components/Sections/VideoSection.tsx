@@ -1,4 +1,3 @@
-import React from 'react';
 import Wrapper from '../Wrapper/Wrapper';
 import '../Section/Section.scss';
 import Video from '../Video/Video';
