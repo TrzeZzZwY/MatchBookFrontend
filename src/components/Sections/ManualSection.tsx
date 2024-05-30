@@ -20,15 +20,17 @@ const ManualSection: React.FC = () => {
     <Wrapper>
       <section className="mt-10" id="manual">
         <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:items-center md:space-y-0">
-          <h3 className="mx-3 min-w-80 text-center text-3xl md:text-4xl font-bold text-gray-800 md:text-left">
+          <h3 className="mx-3 min-w-80 text-center text-3xl font-bold text-gray-800 md:text-left md:text-4xl">
             Jak używać aplikacji?
           </h3>
-          <p className="mx-3 text-center text-gray-600 md:text-left xl:max-w-4xl md:text-base">
-            Aplikacja jest bardzo prosta w obsłudze. Wystarczy, że Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae eveniet, in corporis aut ducimus veniam amet eos aperiam placeat, quibusdam quia quisquam quas rem iure!
+          <p className="mx-3 text-center text-gray-600 md:text-left md:text-base xl:max-w-4xl">
+            Aplikacja jest bardzo prosta w obsłudze. Wystarczy, że Lorem ipsum
+            dolor sit amet consectetur adipisicing elit. Quae eveniet, in
+            corporis aut ducimus veniam amet eos aperiam placeat, quibusdam quia
+            quisquam quas rem iure!
           </p>
         </div>
-
-        <div className="mt-5 flex flex-col justify-between space-y-4 md:flex-row md:space-y-0">
+        <div className="mt-10 flex flex-col justify-between space-y-4 md:flex-row md:space-y-0">
           <ManualButtons
             tabContent={tabContent}
             selectedTab={selectedTab}
