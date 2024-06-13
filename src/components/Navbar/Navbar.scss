@@ -224,6 +224,9 @@
   .nav-link span {
     display: none;
   }
+  .line {
+    display: none !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -235,9 +238,7 @@
       left: 10px;
     }
 
-    .line {
-      display: none;
-    }
+   
 
     .logo {
       width: 50px;

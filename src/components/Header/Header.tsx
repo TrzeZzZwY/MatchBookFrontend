@@ -44,7 +44,7 @@ export default function Header() {
           <div className="phoneContainer">
             <DevicePhoneMobileIcon className="mobilePhone" strokeWidth=".4" />
             <BookOpenIcon className="bookIcon" strokeWidth="1.4" />
-            <h2 className="bookText text-2xl lg:text-3xl 2xl:text-5xl">
+            <h2 className="bookText text-2xl lg:text-3xl 2xl:text-4xl">
               Match<span className="text-blue-500">Book</span>
             </h2>
           </div>
