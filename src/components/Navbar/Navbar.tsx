@@ -1,47 +1,70 @@
-import HamburgerMenu from './HamburgerMenu';
+import React, { useEffect, useRef, useState } from 'react';
 import Logo from './Logo';
 import './Navbar.scss';
-import { BookOpenIcon } from '@heroicons/react/24/outline';
 
-export default function Navbar() {
+const Navbar: React.FC = () => {
+  const [activeItem, setActiveItem] = useState('home');
+  const [navOpen, setNavOpen] = useState(false);
+  const navBarRef = useRef<HTMLUListElement>(null);
+
+  const handleNavItemClick = (id: string) => {
+    setActiveItem(id);
+    setNavOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    setActiveItem('home');
+    setNavOpen(false);
+  };
+
+  const toggleHamburger = () => {
+    setNavOpen(!navOpen);
+  };
+
+  useEffect(() => {
+    const closeNav = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.nav-list') && !target.closest('.hamburger')) {
+        setNavOpen(false);
+      }
+    };
+
+    document.addEventListener('click', closeNav);
+    return () => {
+      document.removeEventListener('click', closeNav);
+    };
+  }, []);
+
   return (
     <nav className="nav">
-       <div className="logoContainer">
-        <a href="#home" className="navbar-brand">
-          <BookOpenIcon className="logo-icon h-12 w-12" />
-          <p>
-            Match<span>book</span>
-          </p>
-        </a>
-      </div>
+      <Logo onLogoClick={handleLogoClick} />
       <div className="line"></div>
-      <ul className="nav-list" id="navbar">
-        <a href="#home" className="nav-item nav-item--active" data-id="home">
-          <li className="nav-link">
-            <span>00</span> Home
-          </li>
-        </a>
-        <a href="#books" className="nav-item" data-id="books">
-          <li className="nav-link">
-            <span>01</span> Books
-          </li>
-        </a>
-        <a href="#ratings" className="nav-item" data-id="ratings">
-          <li className="nav-link">
-            <span>02</span> Ratings
-          </li>
-        </a>
-        <a href="#team" className="nav-item" data-id="team">
-          <li className="nav-link">
-            <span>03</span> Team
-          </li>
-        </a>
+      <ul className={`nav-list ${navOpen ? 'nav-list--active' : ''}`} id="navbar" ref={navBarRef}>
+        {['home', 'books', 'ratings', 'team'].map((id, index) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            className={`nav-item ${activeItem === id ? 'nav-item--active' : ''}`}
+            data-id={id}
+            onClick={() => handleNavItemClick(id)}
+          >
+            <li className="nav-link">
+              <span>{`0${index}`}</span> {id.charAt(0).toUpperCase() + id.slice(1)}
+            </li>
+          </a>
+        ))}
       </ul>
-      <button className="hamburger hamburger--arrow" type="button">
+      <button
+        className={`hamburger hamburger--arrow ${navOpen ? 'is-active' : ''}`}
+        type="button"
+        onClick={toggleHamburger}
+      >
         <span className="hamburger-box">
           <span className="hamburger-inner"></span>
         </span>
       </button>
     </nav>
   );
-}
+};
+
+export default Navbar;
