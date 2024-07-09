@@ -36,7 +36,6 @@
     }
 
     span {
-      color: $main-color;
       transition: all 0.3s ease-in-out;
     }
 
@@ -47,10 +46,10 @@
 
     &:hover {
       p {
-        color: $main-color;
+        color: #f49d0c;
       }
       span {
-        color: $white;
+        color: #fffbeb;
       }
     }
   }
@@ -330,7 +329,7 @@
         }
 
         &--active::before {
-          background-color: $white;
+          background-color: $main-color;
           width: 3px;
           transform: scaleY(0.6);
         }

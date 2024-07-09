@@ -1,5 +1,6 @@
 import React from 'react';
 import './Buttons.scss';
+
 interface ManualButtonProps {
   index: number;
   isActive: boolean;
@@ -16,8 +17,8 @@ const ManualButton: React.FC<ManualButtonProps> = ({
       className={`my-5 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border text-lg transition-all duration-300 ease-in-out sm:h-20 sm:w-20 sm:text-2xl 2xl:h-24 2xl:w-24 2xl:text-4xl
         ${
           isActive
-            ? 'blueBackround'
-            : 'hover:opacity-100 hover:opacity-1 border-opacity-30 darkBackground opacity-80'
+            ? 'bg-sunflower-700 text-sunflower-950 border-sunflower-700'
+            : 'bg-sunflower-500 text-sunflower-950 border-sunflower-400 hover:bg-sunflower-600'
         }`}
       onClick={onClick}
     >

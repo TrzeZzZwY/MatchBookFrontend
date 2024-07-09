@@ -2,14 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #333;
   height: 100px;
   width: 100%;
   position: relative;
   bottom: 0;
   left: 0;
   z-index: 100;
-  border-top: 1px solid #e9ecef;
   color: #fff;
   height: fit-content;
+  @apply bg-sunflower-100 dark:bg-gray-950;
 }

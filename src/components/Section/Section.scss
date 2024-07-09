@@ -4,7 +4,7 @@
   position: absolute;
   height: 40px;
   width: 60%;
-  background-color: $white;
+  @apply bg-sunflower-50 dark:bg-gray-900;
   z-index: 1;
   &-left {
     bottom: 0;
@@ -20,7 +20,7 @@
 
   &-dark {
     top: -40px;
-    background-color: #333 !important;
+    @apply bg-sunflower-100 dark:bg-gray-950;
     left: -50px;
     transform: skew(45deg);
   }

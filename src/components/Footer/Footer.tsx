@@ -4,52 +4,87 @@ import '../Section/Section.scss';
 
 export default function Footer() {
   return (
-    <footer className="footerContainer mt-20 w-full">
+    <footer className="footerContainer mt-20 w-full bg-sunflower-50 dark:bg-sunflower-950">
       <div className="white-block white-block-dark"></div>
 
       <Wrapper>
-        <div className="mt-10 flex flex-col md:flex-row items-center justify-between text-lg">
-          <ul className="flex flex-col md:flex-row items-center mb-4 md:mb-0">
-            <li className="mr-0 md:mr-4 mb-2 md:mb-0">
-              <a href="#" target="_blank" rel="noreferrer">
+        <div className="mt-10 flex flex-col items-center justify-between text-lg md:flex-row">
+          <ul className="mb-4 flex flex-col items-center md:mb-0 md:flex-row">
+            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
+              >
                 O nas
               </a>
             </li>
-            <li className="mr-0 md:mr-4 mb-2 md:mb-0">
-              <a href="#" target="_blank" rel="noreferrer">
+            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
+              >
                 Zarząd
               </a>
             </li>
-            <li className="mr-0 md:mr-4 mb-2 md:mb-0">
-              <a href="#" target="_blank" rel="noreferrer">
+            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
+              >
                 Kariera
               </a>
             </li>
             <li>
-              <a href="#" target="_blank" rel="noreferrer">
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
+              >
                 FAQ
               </a>
             </li>
           </ul>
-          <ul className="flex flex-col md:flex-row items-center">
-            <li className="mr-0 md:mr-4 mb-2 md:mb-0">
-              <a href="#" target="_blank" rel="noreferrer">
+          <ul className="flex flex-col items-center md:flex-row">
+            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
+              >
                 Polityka prywatności
               </a>
             </li>
-            <li className="mr-0 md:mr-4 mb-2 md:mb-0">
-              <a href="#" target="_blank" rel="noreferrer">
+            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
+              >
                 Regulamin
               </a>
             </li>
             <li>
-              <a href="#" target="_blank" rel="noreferrer">
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
+              >
                 Kontakt
               </a>
             </li>
           </ul>
         </div>
-        <p className="my-5 text-center text-gray-300 ">
+        <p className="my-5 text-center text-sunflower-800 dark:text-gray-200">
           &copy; 2024 MatchBook All rights reserved
         </p>
       </Wrapper>

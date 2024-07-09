@@ -14,10 +14,10 @@ const ManualTabContent: React.FC<ManualTabContentProps> = ({
   return (
     <>
       <div className="align-center mx-10 flex flex-col text-center md:flex-1 md:items-start md:text-justify">
-        <h4 className="mt-5 text-2xl font-bold text-gray-800 md:mt-0">
+        <h4 className="mt-5 text-2xl font-bold text-sunflower-800 dark:text-sunflower-50 md:mt-0">
           {title}
         </h4>
-        <p className="mt-4 text-gray-600">{description}</p>
+        <p className="mt-4 text-sunflower-600 dark:text-sunflower-300">{description}</p>
       </div>
       <div className="img-container order-first w-full flex-1 md:order-none">
         <div className="white-block white-block-right md:hidden"></div>

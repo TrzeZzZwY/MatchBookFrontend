@@ -17,4 +17,5 @@ body {
   font-family: 'Montserrat', sans-serif;
   color: #fff;
   height: 100vh;
+  @apply bg-sunflower-50 dark:bg-gray-900;
 }
