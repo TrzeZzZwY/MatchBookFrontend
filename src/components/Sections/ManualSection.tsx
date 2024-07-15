@@ -20,10 +20,10 @@ const ManualSection: React.FC = () => {
     <Wrapper>
       <section className="mt-10" id="manual">
         <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:items-center md:space-y-0">
-          <h3 className="mx-3 min-w-80 text-center text-3xl font-bold text-sunflower-800 dark:text-sunflower-50 md:text-left md:text-4xl">
+          <h3 className="mx-3 min-w-80 text-center text-3xl font-bold text-sunflower-800 md:text-left md:text-4xl dark:text-sunflower-50">
             Jak używać aplikacji?
           </h3>
-          <p className="mx-3 text-center text-sunflower-600 dark:text-sunflower-300 md:text-left md:text-base xl:max-w-4xl">
+          <p className="mx-3 text-center font-semibold text-sunflower-600 md:text-left md:text-base xl:max-w-4xl dark:text-sunflower-300	">
             Aplikacja jest bardzo prosta w obsłudze. Wystarczy, że Lorem ipsum
             dolor sit amet consectetur adipisicing elit. Quae eveniet, in
             corporis aut ducimus veniam amet eos aperiam placeat, quibusdam quia

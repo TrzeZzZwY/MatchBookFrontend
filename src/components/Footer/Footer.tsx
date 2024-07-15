@@ -9,7 +9,7 @@ export default function Footer() {
 
       <Wrapper>
         <div className="mt-10 flex flex-col items-center justify-between text-lg md:flex-row">
-          <ul className="mb-4 flex flex-col items-center md:mb-0 md:flex-row">
+          <ul className="mb-4 flex flex-col items-center font-semibold md:mb-0 md:flex-row	">
             <li className="mb-2 mr-0 md:mb-0 md:mr-4">
               <a
                 href="#"
@@ -51,7 +51,7 @@ export default function Footer() {
               </a>
             </li>
           </ul>
-          <ul className="flex flex-col items-center md:flex-row">
+          <ul className="flex flex-col items-center font-semibold md:flex-row	">
             <li className="mb-2 mr-0 md:mb-0 md:mr-4">
               <a
                 href="#"
