@@ -7,15 +7,15 @@
   z-index: -1;
   filter: brightness(0.6);
   overflow: hidden;
-  max-width: 100vw;
-  max-height: 100vh;
+  max-width: 100svw;
+  max-height: 100svh;
 }
 
 .hero-img {
   position: relative;
   top: 0;
   left: 0;
-  background-image: url('https://picsum.photos/2500/1500');
+  background-image: url('/src/assets/img/book_small.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -27,10 +27,6 @@
 }
 
 .hero-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
   display: flex;
@@ -38,12 +34,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  z-index: 1;
 }
 
 .hero-text h1,
 .hero-text p {
-  font-size: 32px;
   text-transform: uppercase;
   margin: 0;
   z-index: 1;
@@ -52,7 +46,6 @@
 
 .hero-text a,
 .hero-text p {
-  font-size: 16px;
   margin-top: 10px;
   font-weight: bold;
   text-transform: uppercase;
@@ -62,9 +55,8 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 3%;
+  bottom: 10%;
   padding: 5px;
-  font-size: 32px;
   color: $white;
   cursor: pointer;
 }
@@ -72,39 +64,68 @@
   color: $main-color;
 }
 
-.fa-chevron-down {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 3%;
-  padding: 5px;
-  font-size: 32px;
-  color: $white;
-  cursor: pointer;
+.phoneContainer {
+  position: relative;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80vh;
+  margin-top: 7rem;
+
+  .mobilePhone {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: 90%;
+    min-height: 450px;
+    min-width: 380px;
+  }
+
+  .bookIcon {
+    position: absolute;
+    width: 25%;
+    height: 25%;
+    top: 20%;
+    left: 50%;
+    flex-wrap: nowrap;
+    transform: translateX(-50%);
+  }
+
+  .bookText {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: $white;
+  }
 }
 
-#tiles {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  width: 100vw;
-  display: grid;
-  grid-template-columns: repeat(var(--columns), 1fr);
-  grid-template-rows: repeat(var(--rows), 1fr);
-  z-index: 1;
+@media (max-width: 1280px) {
+  .mobilePhone {
+    width: 80% !important;
+    height: 80% !important;
+  }
 }
 
 @media (min-width: 768px) {
-  .hero-text {
-    h1 {
-      font-size: 48px;
-    }
-    p {
-      font-size: 24px;
-    }
-    a {
-      margin-top: 16px;
-    }
+  .bookIcon {
+    top: 25% !important;
+  }
+
+  .hero-img {
+    background-image: url('/src/assets/img/book_big.png');
+  }
+
+  .fa-chevron-down {
+    bottom: 3%;
   }
 }
