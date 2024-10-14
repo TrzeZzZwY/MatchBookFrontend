@@ -1,20 +1,21 @@
-import Navbar from './components/Navbar/Navbar.tsx';
-import Header from './components/Header/Header.tsx';
-import VideoSection from './components/Sections/VideoSection.tsx';
-import ScreensSection from './components/Sections/ScreensSection.tsx';
-import ManualSection from './components/Sections/ManualSection.tsx';
-import Footer from './components/Footer/Footer.tsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage/HomePage';
+import LoginPage from './pages/Login/Login';
+import RegisterPage from './pages/Register/Register';
+import AdminPanel from './pages/AdminPanel/AdminPanel';
 
 const App = () => {
   return (
-    <>
-      <Navbar />
-      <Header />
-      <VideoSection />
-      <ScreensSection />
-      <ManualSection />
-      <Footer />
-    </>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/admin-panel" element={<AdminPanel />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

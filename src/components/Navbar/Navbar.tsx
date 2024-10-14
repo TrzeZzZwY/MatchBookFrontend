@@ -39,17 +39,24 @@ const Navbar: React.FC = () => {
     <nav className="nav">
       <Logo onLogoClick={handleLogoClick} />
       <div className="line"></div>
-      <ul className={`nav-list ${navOpen ? 'nav-list--active' : ''}`} id="navbar" ref={navBarRef}>
+      <ul
+        className={`nav-list ${navOpen ? 'nav-list--active' : ''}`}
+        id="navbar"
+        ref={navBarRef}
+      >
         {['home', 'aplikacja', 'how to', 'team'].map((id, index) => (
           <a
             key={id}
             href={`#${id}`}
-            className={`nav-item ${activeItem === id ? 'nav-item--active' : ''}`}
+            className={`nav-item ${
+              activeItem === id ? 'nav-item--active' : ''
+            }`}
             data-id={id}
             onClick={() => handleNavItemClick(id)}
           >
             <li className="nav-link">
-              <span>{`0${index}`}</span> {id.charAt(0).toUpperCase() + id.slice(1)}
+              <span>{`0${index}`}</span>{' '}
+              {id.charAt(0).toUpperCase() + id.slice(1)}
             </li>
           </a>
         ))}
