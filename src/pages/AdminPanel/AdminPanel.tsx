@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Sidebar from '@/components/Dashboard/Sidebar/Sidebar';
 import Dashboard from '@/components/Dashboard/Dashboard/Dashboard';
 import Users from '@/components/Dashboard/Users/Users';
+import Books from '@/components/Dashboard/Books/Books';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -14,6 +15,8 @@ const AdminPanel = () => {
         return <Dashboard />;
       case 'users':
         return <Users />;
+      case 'books':
+        return <Books />;
       default:
         return <div>Content for {activeTab}</div>;
     }
