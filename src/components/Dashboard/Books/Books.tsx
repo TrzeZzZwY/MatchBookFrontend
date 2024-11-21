@@ -63,7 +63,6 @@ const books = [
     updateDate: '2023-06-16',
     description: 'Klasyczna polska powieść o miłości i społeczeństwie',
     imageId: 1,
-    views: 1500,
     visibility: 'Public',
     authors: ['Bolesław Prus'],
     likes: 120,
@@ -81,7 +80,6 @@ const books = [
     updateDate: null,
     description: 'Narodowy poemat epicki Adama Mickiewicza',
     imageId: 2,
-    views: 2000,
     visibility: 'Private',
     authors: ['Adam Mickiewicz'],
     likes: 150,
@@ -99,7 +97,6 @@ const books = [
     updateDate: '2023-06-14',
     description: 'Powieść historyczna o starożytnym Rzymie',
     imageId: 3,
-    views: 1800,
     visibility: 'Public',
     authors: ['Henryk Sienkiewicz'],
     likes: 140,
@@ -228,7 +225,6 @@ export default function Books() {
                 <TableHead className="text-black">Kategoria</TableHead>
                 <TableHead className="text-black">Punkt książki</TableHead>
                 <TableHead className="text-black">Widoczność</TableHead>
-                <TableHead className="text-black">Wyświetlenia</TableHead>
                 <TableHead className="text-black">Polubienia</TableHead>
                 <TableHead className="text-right text-black">Akcje</TableHead>
               </TableRow>
@@ -252,12 +248,6 @@ export default function Books() {
                     ) : (
                       <Lock className="h-4 w-4 text-yellow-500" />
                     )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center text-black">
-                      <Eye className="mr-1 h-4 w-4 text-gray-500" />
-                      {book.views}
-                    </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center text-black">

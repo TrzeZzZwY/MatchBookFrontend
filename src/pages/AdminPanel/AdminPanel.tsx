@@ -5,6 +5,9 @@ import Sidebar from '@/components/Dashboard/Sidebar/Sidebar';
 import Dashboard from '@/components/Dashboard/Dashboard/Dashboard';
 import Users from '@/components/Dashboard/Users/Users';
 import Books from '@/components/Dashboard/Books/Books';
+import Authors from '@/components/Dashboard/Authors/Authors';
+import Reports from '@/components/Dashboard/Reports/Reports';
+import BookPoint from '@/components/Dashboard/BookPoint/BookPoint';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -17,6 +20,12 @@ const AdminPanel = () => {
         return <Users />;
       case 'books':
         return <Books />;
+      case 'authors':
+        return <Authors />;
+      case 'reports':
+        return <Reports />;
+      case 'bookpoints':
+        return <BookPoint />;
       default:
         return <div>Content for {activeTab}</div>;
     }
