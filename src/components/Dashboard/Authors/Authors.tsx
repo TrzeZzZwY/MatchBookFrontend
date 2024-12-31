@@ -1,7 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { MoreHorizontal, Plus, Search, Book } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  MoreHorizontal,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -20,65 +25,76 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import AuthorService from '../Authors/services/AuthorsService';
+import { AddAuthorDialog } from './components/AddAuthorDialog/AddAuthorDialog';
 
-// Mock data for authors
-const authors = [
-  {
-    id: 1,
-    name: 'Henryk',
-    surname: 'Sienkiewicz',
-    books: [
-      { id: 1, title: 'Quo Vadis' },
-      { id: 2, title: 'Krzyżacy' },
-      { id: 3, title: 'Potop' },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Wisława',
-    surname: 'Szymborska',
-    books: [
-      { id: 4, title: 'Wołanie do Yeti' },
-      { id: 5, title: 'Sto pociech' },
-    ],
-  },
-  {
-    id: 3,
-    name: 'Stanisław',
-    surname: 'Lem',
-    books: [
-      { id: 6, title: 'Solaris' },
-      { id: 7, title: 'Cyberiada' },
-      { id: 8, title: 'Bajki robotów' },
-      { id: 9, title: 'Opowieści o pilocie Pirxie' },
-    ],
-  },
-];
+interface Author {
+  id: number;
+  firstName: string;
+  lastName: string;
+  country: string;
+  yearOfBirth: number;
+  isRemoved: boolean;
+}
+
+interface AuthorsResponse {
+  itemsCount: number;
+  pageNumber: number;
+  pageSize: number;
+  items: Author[];
+}
 
 export default function Authors() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredAuthors, setFilteredAuthors] = useState(authors);
+  const [authors, setAuthors] = useState<Author[]>([]);
+  const [filteredAuthors, setFilteredAuthors] = useState<Author[]>([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    fetchAuthors();
+  }, [pageNumber, pageSize]);
+
+  const fetchAuthors = () => {
+    AuthorService.getAuthors({ pageNumber, pageSize })
+      .then((data: AuthorsResponse) => {
+        setAuthors(data.items);
+        setFilteredAuthors(data.items);
+        setTotalItems(data.itemsCount);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch authors:', error);
+      });
+  };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
     const filtered = authors.filter(
       (author) =>
-        author.name.toLowerCase().includes(term) ||
-        author.surname.toLowerCase().includes(term),
+        author.firstName.toLowerCase().includes(term) ||
+        author.lastName.toLowerCase().includes(term) ||
+        author.country.toLowerCase().includes(term),
     );
     setFilteredAuthors(filtered);
+  };
+
+  const handlePreviousPage = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (pageNumber < Math.ceil(totalItems / pageSize)) {
+      setPageNumber(pageNumber + 1);
+    }
+  };
+
+  const handleAuthorAdded = () => {
+    fetchAuthors();
   };
 
   return (
@@ -86,41 +102,7 @@ export default function Authors() {
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
           <h1 className="text-2xl font-bold text-black md:text-3xl">Autorzy</h1>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" /> Dodaj autora
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle className="text-black">
-                  Dodaj nowego autora
-                </DialogTitle>
-                <DialogDescription className="text-gray-600">
-                  Wprowadź dane nowego autora tutaj. Kliknij „zapisz", gdy
-                  skończysz.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right text-black">
-                    Imię
-                  </Label>
-                  <Input id="name" className="col-span-3 text-black" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="surname" className="text-right text-black">
-                    Nazwisko
-                  </Label>
-                  <Input id="surname" className="col-span-3 text-black" />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Zapisz autora</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <AddAuthorDialog onAuthorAdded={handleAuthorAdded} />
         </div>
         <div className="flex items-center space-x-2">
           <Search className="h-5 w-5 text-gray-500" />
@@ -137,7 +119,8 @@ export default function Authors() {
               <TableRow>
                 <TableHead className="w-[200px] text-black">Imię</TableHead>
                 <TableHead className="w-[200px] text-black">Nazwisko</TableHead>
-                <TableHead className="text-black">Książki</TableHead>
+                <TableHead className="text-black">Kraj</TableHead>
+                <TableHead className="text-black">Rok urodzenia</TableHead>
                 <TableHead className="text-right text-black">Akcje</TableHead>
               </TableRow>
             </TableHeader>
@@ -145,16 +128,16 @@ export default function Authors() {
               {filteredAuthors.map((author) => (
                 <TableRow key={author.id}>
                   <TableCell className="font-medium text-black">
-                    {author.name}
+                    {author.firstName}
                   </TableCell>
                   <TableCell className="font-medium text-black">
-                    {author.surname}
+                    {author.lastName}
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center text-black">
-                      <Book className="mr-1 h-4 w-4 text-gray-500" />
-                      {author.books.length}
-                    </div>
+                  <TableCell className="font-medium text-black">
+                    {author.country}
+                  </TableCell>
+                  <TableCell className="font-medium text-black">
+                    {author.yearOfBirth}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -185,6 +168,33 @@ export default function Authors() {
               ))}
             </TableBody>
           </Table>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-gray-500">
+            Showing {(pageNumber - 1) * pageSize + 1} to{' '}
+            {Math.min(pageNumber * pageSize, totalItems)} of {totalItems}{' '}
+            authors
+          </p>
+          <div className="flex items-center space-x-2 text-black">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePreviousPage}
+              disabled={pageNumber === 1}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Poprzednia strona
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleNextPage}
+              disabled={pageNumber >= Math.ceil(totalItems / pageSize)}
+            >
+              Następna strona
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </ScrollArea>
