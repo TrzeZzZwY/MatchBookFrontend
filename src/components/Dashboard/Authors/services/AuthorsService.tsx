@@ -26,6 +26,22 @@ const AuthorService = {
 
     return CancelablePromise(promise);
   },
+
+  updateAuthor(authorId: number, author: Author) {
+    const promise = RequestService.put(`/api/Author/${authorId}`, author).then(
+      (response) => response.data,
+    );
+
+    return CancelablePromise(promise);
+  },
+
+  deleteAuthor(authorId: number) {
+    const promise = RequestService.delete(`/api/Author/${authorId}`).then(
+      (response) => response.data,
+    );
+
+    return CancelablePromise(promise);
+  },
 };
 
 export default AuthorService;

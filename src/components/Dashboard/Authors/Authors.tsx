@@ -26,8 +26,21 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import AuthorService from '../Authors/services/AuthorsService';
 import { AddAuthorDialog } from './components/AddAuthorDialog/AddAuthorDialog';
+import { EditAuthorDialog } from './components/EditAuthorDialog/EditAuthorDialog';
+import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
 
 interface Author {
   id: number;
@@ -52,6 +65,10 @@ export default function Authors() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [totalItems, setTotalItems] = useState(0);
+  const [editingAuthor, setEditingAuthor] = useState<Author | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [authorToDelete, setAuthorToDelete] = useState<number | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchAuthors();
@@ -66,6 +83,11 @@ export default function Authors() {
       })
       .catch((error) => {
         console.error('Failed to fetch authors:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Błąd',
+          description: 'Nie udało się pobrać listy autorów.',
+        });
       });
   };
 
@@ -95,6 +117,50 @@ export default function Authors() {
 
   const handleAuthorAdded = () => {
     fetchAuthors();
+    toast({
+      title: 'Sukces',
+      description: 'Autor został dodany pomyślnie.',
+    });
+  };
+
+  const handleEditAuthor = (author: Author) => {
+    setEditingAuthor(author);
+  };
+
+  const handleAuthorUpdated = () => {
+    fetchAuthors();
+    setEditingAuthor(null);
+    toast({
+      title: 'Sukces',
+      description: 'Dane autora zostały zaktualizowane pomyślnie.',
+    });
+  };
+
+  const handleDeleteAuthor = (authorId: number) => {
+    setAuthorToDelete(authorId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDeleteAuthor = async () => {
+    if (authorToDelete) {
+      try {
+        await AuthorService.deleteAuthor(authorToDelete);
+        fetchAuthors();
+        toast({
+          title: 'Sukces',
+          description: 'Autor został usunięty pomyślnie.',
+        });
+      } catch (error) {
+        console.error('Failed to delete author:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Błąd',
+          description: 'Nie udało się usunąć autora.',
+        });
+      }
+    }
+    setDeleteConfirmOpen(false);
+    setAuthorToDelete(null);
   };
 
   return (
@@ -151,14 +217,17 @@ export default function Authors() {
                         <DropdownMenuLabel className="text-black">
                           Akcje
                         </DropdownMenuLabel>
-                        <DropdownMenuItem className="text-black">
-                          Wyświetl szczegóły
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-black">
+                        <DropdownMenuItem
+                          onClick={() => handleEditAuthor(author)}
+                          className="text-black"
+                        >
                           Edytuj autora
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem
+                          onClick={() => handleDeleteAuthor(author.id)}
+                          className="text-red-600"
+                        >
                           Usuń autora
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -197,6 +266,34 @@ export default function Authors() {
           </div>
         </div>
       </div>
+      {editingAuthor && (
+        <EditAuthorDialog
+          author={editingAuthor}
+          isOpen={!!editingAuthor}
+          onClose={() => setEditingAuthor(null)}
+          onAuthorUpdated={handleAuthorUpdated}
+        />
+      )}
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Czy na pewno chcesz usunąć tego autora?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Ta akcja jest nieodwracalna. Spowoduje to trwałe usunięcie autora
+              z naszej bazy danych.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Anuluj</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteAuthor}>
+              Usuń
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Toaster />
     </ScrollArea>
   );
 }

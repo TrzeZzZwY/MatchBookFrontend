@@ -4,7 +4,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -14,7 +13,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -24,7 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
 import AuthorService from '../../services/AuthorsService';
 
 const formSchema = z.object({
@@ -49,56 +46,52 @@ const formSchema = z.object({
     .max(new Date().getFullYear(), 'Rok urodzenia nie może być w przyszłości'),
 });
 
-interface AddAuthorDialogProps {
-  onAuthorAdded: () => void;
+interface EditAuthorDialogProps {
+  author: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    country: string;
+    yearOfBirth: number;
+  };
+  isOpen: boolean;
+  onClose: () => void;
+  onAuthorUpdated: () => void;
 }
 
-export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const { toast } = useToast();
-
+export function EditAuthorDialog({
+  author,
+  isOpen,
+  onClose,
+  onAuthorUpdated,
+}: EditAuthorDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      country: '',
-      yearOfBirth: undefined,
+      firstName: author.firstName,
+      lastName: author.lastName,
+      country: author.country,
+      yearOfBirth: author.yearOfBirth,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await AuthorService.addAuthor(values);
-      onAuthorAdded();
-      setIsOpen(false);
-      form.reset();
-      toast({
-        title: 'Sukces',
-        description: 'Autor został dodany pomyślnie.',
-      });
+      await AuthorService.updateAuthor(author.id, values);
+      onAuthorUpdated();
+      onClose();
     } catch (error) {
-      console.error('Failed to add author:', error);
-      toast({
-        title: 'Błąd',
-        description: 'Nie udało się dodać autora.',
-        variant: 'destructive',
-      });
+      console.error('Failed to update author:', error);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Dodaj autora
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-black">Dodaj nowego autora</DialogTitle>
+          <DialogTitle className="text-black">Edytuj autora</DialogTitle>
           <DialogDescription className="text-gray-600">
-            Wprowadź dane nowego autora tutaj. Kliknij „zapisz", gdy skończysz.
+            Zaktualizuj dane autora tutaj. Kliknij „zapisz", gdy skończysz.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -165,7 +158,7 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
               )}
             />
             <DialogFooter>
-              <Button type="submit">Zapisz autora</Button>
+              <Button type="submit">Zapisz zmiany</Button>
             </DialogFooter>
           </form>
         </Form>
