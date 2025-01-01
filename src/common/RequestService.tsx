@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { BOOK_SERVICE_URL } from '../../config.json';
 
-const BASE_URL = 'https://localhost:8100';
+const BASE_URL = BOOK_SERVICE_URL;
 
 const RequestService = {
   get: (url: string, params = {}, headers = {}) => {

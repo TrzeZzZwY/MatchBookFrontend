@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   Table,
   TableBody,
   TableCell,
@@ -26,16 +34,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import AuthorService from '../Authors/services/AuthorsService';
 import { AddAuthorDialog } from './components/AddAuthorDialog/AddAuthorDialog';
 import { EditAuthorDialog } from './components/EditAuthorDialog/EditAuthorDialog';
@@ -63,19 +62,22 @@ export default function Authors() {
   const [authors, setAuthors] = useState<Author[]>([]);
   const [filteredAuthors, setFilteredAuthors] = useState<Author[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(50);
   const [totalItems, setTotalItems] = useState(0);
   const [editingAuthor, setEditingAuthor] = useState<Author | null>(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [authorToDelete, setAuthorToDelete] = useState<number | null>(null);
+  const [showRemoved, setShowRemoved] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchAuthors();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, pageSize, showRemoved]);
+
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchAuthors = () => {
-    AuthorService.getAuthors({ pageNumber, pageSize })
+    AuthorService.getAuthors({ showRemoved, pageSize, pageNumber })
       .then((data: AuthorsResponse) => {
         setAuthors(data.items);
         setFilteredAuthors(data.items);
@@ -110,9 +112,8 @@ export default function Authors() {
   };
 
   const handleNextPage = () => {
-    if (pageNumber < Math.ceil(totalItems / pageSize)) {
-      setPageNumber(pageNumber + 1);
-    }
+    setPageNumber(pageNumber + 1);
+    fetchAuthors();
   };
 
   const handleAuthorAdded = () => {
@@ -136,13 +137,14 @@ export default function Authors() {
     });
   };
 
-  const handleDeleteAuthor = (authorId: number) => {
-    setAuthorToDelete(authorId);
+  const handleDeleteAuthor = (author: Author) => {
+    setAuthorToDelete(author.id);
     setDeleteConfirmOpen(true);
   };
 
   const confirmDeleteAuthor = async () => {
     if (authorToDelete) {
+      setIsDeleting(true);
       try {
         await AuthorService.deleteAuthor(authorToDelete);
         fetchAuthors();
@@ -157,10 +159,12 @@ export default function Authors() {
           title: 'Błąd',
           description: 'Nie udało się usunąć autora.',
         });
+      } finally {
+        setIsDeleting(false);
+        setDeleteConfirmOpen(false);
+        setAuthorToDelete(null);
       }
     }
-    setDeleteConfirmOpen(false);
-    setAuthorToDelete(null);
   };
 
   return (
@@ -170,14 +174,43 @@ export default function Authors() {
           <h1 className="text-2xl font-bold text-black md:text-3xl">Autorzy</h1>
           <AddAuthorDialog onAuthorAdded={handleAuthorAdded} />
         </div>
-        <div className="flex items-center space-x-2">
-          <Search className="h-5 w-5 text-gray-500" />
-          <Input
-            placeholder="Szukaj autorów..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="max-w-sm text-black"
-          />
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <Search className="h-5 w-5 text-gray-500" />
+            <Input
+              placeholder="Szukaj autorów..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="max-w-sm text-black"
+            />
+          </div>
+          <Select
+            value={pageSize.toString()}
+            onValueChange={(value) => setPageSize(Number(value))}
+          >
+            <SelectTrigger className="w-[180px] text-black">
+              <SelectValue placeholder="Wybierz rozmiar strony" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10 na stronę</SelectItem>
+              <SelectItem value="25">25 na stronę</SelectItem>
+              <SelectItem value="50">50 na stronę</SelectItem>
+              <SelectItem value="100">100 na stronę</SelectItem>
+            </SelectContent>
+          </Select>
+          <div className="flex items-center space-x-2 text-black">
+            <Checkbox
+              id="showRemoved"
+              checked={showRemoved}
+              onCheckedChange={(checked) => setShowRemoved(checked as boolean)}
+            />
+            <label
+              htmlFor="showRemoved"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Pokaż usunięte rekordy
+            </label>
+          </div>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -187,6 +220,7 @@ export default function Authors() {
                 <TableHead className="w-[200px] text-black">Nazwisko</TableHead>
                 <TableHead className="text-black">Kraj</TableHead>
                 <TableHead className="text-black">Rok urodzenia</TableHead>
+                <TableHead className="text-black">Status</TableHead>
                 <TableHead className="text-right text-black">Akcje</TableHead>
               </TableRow>
             </TableHeader>
@@ -205,34 +239,47 @@ export default function Authors() {
                   <TableCell className="font-medium text-black">
                     {author.yearOfBirth}
                   </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Otwórz menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel className="text-black">
-                          Akcje
-                        </DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => handleEditAuthor(author)}
-                          className="text-black"
-                        >
-                          Edytuj autora
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => handleDeleteAuthor(author.id)}
-                          className="text-red-600"
-                        >
-                          Usuń autora
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  <TableCell>
+                    <span
+                      className={`rounded-full px-2 py-1 text-xs ${
+                        author.isRemoved == false
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}
+                    >
+                      {author.isRemoved ? 'Usunięty' : 'Aktywny'}
+                    </span>
                   </TableCell>
+                  {author.isRemoved == false ? (
+                    <TableCell className="text-right text-black">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Otwórz menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel className="text-black">
+                            Akcje
+                          </DropdownMenuLabel>
+                          <DropdownMenuItem
+                            onClick={() => handleEditAuthor(author)}
+                            className="text-black"
+                          >
+                            Edytuj autora
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteAuthor(author)}
+                            className="text-red-600"
+                          >
+                            Usuń autora
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  ) : null}
                 </TableRow>
               ))}
             </TableBody>
@@ -258,7 +305,7 @@ export default function Authors() {
               variant="outline"
               size="sm"
               onClick={handleNextPage}
-              disabled={pageNumber >= Math.ceil(totalItems / pageSize)}
+              // disabled={pageNumber >= Math.ceil(totalItems / pageSize)}
             >
               Następna strona
               <ChevronRight className="h-4 w-4" />
@@ -274,25 +321,22 @@ export default function Authors() {
           onAuthorUpdated={handleAuthorUpdated}
         />
       )}
-      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Czy na pewno chcesz usunąć tego autora?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Ta akcja jest nieodwracalna. Spowoduje to trwałe usunięcie autora
-              z naszej bazy danych.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Anuluj</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteAuthor}>
-              Usuń
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmationDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={confirmDeleteAuthor}
+        title="Potwierdzenie usunięcia"
+        description={`Czy na pewno chcesz usunąć autora ${
+          authorToDelete
+            ? `${authors.find((a) => a.id === authorToDelete)?.firstName} ${
+                authors.find((a) => a.id === authorToDelete)?.lastName
+              }`
+            : ''
+        }?`}
+        confirmLabel="Usuń"
+        cancelLabel="Anuluj"
+        isProcessing={isDeleting}
+      />
       <Toaster />
     </ScrollArea>
   );

@@ -94,11 +94,11 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
           <Plus className="mr-2 h-4 w-4" /> Dodaj autora
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="text-black sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-black">Dodaj nowego autora</DialogTitle>
           <DialogDescription className="text-gray-600">
-            Wprowadź dane nowego autora tutaj. Kliknij „zapisz", gdy skończysz.
+            Wprowadź dane nowego autora tutaj. Kliknij zapisz, gdy skończysz.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

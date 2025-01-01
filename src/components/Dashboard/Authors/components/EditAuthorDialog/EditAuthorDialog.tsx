@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -87,11 +86,11 @@ export function EditAuthorDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="text-black sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-black">Edytuj autora</DialogTitle>
           <DialogDescription className="text-gray-600">
-            Zaktualizuj dane autora tutaj. Kliknij „zapisz", gdy skończysz.
+            Zaktualizuj dane autora tutaj. Kliknij zapisz, gdy skończysz.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
