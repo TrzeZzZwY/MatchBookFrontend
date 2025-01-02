@@ -33,11 +33,16 @@ export function ConfirmationDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="text-black">{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={isProcessing}>
+          <Button
+            variant="outline"
+            onClick={onClose}
+            disabled={isProcessing}
+            className="text-black"
+          >
             {cancelLabel}
           </Button>
           <Button onClick={onConfirm} disabled={isProcessing}>

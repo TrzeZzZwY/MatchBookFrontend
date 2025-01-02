@@ -250,8 +250,8 @@ export default function Authors() {
                       {author.isRemoved ? 'Usunięty' : 'Aktywny'}
                     </span>
                   </TableCell>
-                  {author.isRemoved == false ? (
-                    <TableCell className="text-right text-black">
+                  <TableCell className="text-right text-black">
+                    {author.isRemoved == false ? (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -278,8 +278,8 @@ export default function Authors() {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </TableCell>
-                  ) : null}
+                    ) : null}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
