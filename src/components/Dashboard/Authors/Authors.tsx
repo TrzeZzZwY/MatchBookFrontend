@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   MoreHorizontal,
   Search,
@@ -52,6 +52,7 @@ interface Author {
 
 interface AuthorsResponse {
   itemsCount: number;
+  totalItemsCount: number;
   pageNumber: number;
   pageSize: number;
   items: Author[];
@@ -60,7 +61,6 @@ interface AuthorsResponse {
 export default function Authors() {
   const [searchTerm, setSearchTerm] = useState('');
   const [authors, setAuthors] = useState<Author[]>([]);
-  const [filteredAuthors, setFilteredAuthors] = useState<Author[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(50);
   const [totalItems, setTotalItems] = useState(0);
@@ -70,18 +70,16 @@ export default function Authors() {
   const [showRemoved, setShowRemoved] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchAuthors();
-  }, [pageNumber, pageSize, showRemoved]);
-
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const fetchAuthors = () => {
-    AuthorService.getAuthors({ showRemoved, pageSize, pageNumber })
+  const fetchAuthors = useCallback(() => {
+    AuthorService.getAuthors({
+      showRemoved,
+      pageSize,
+      pageNumber,
+      authorName: searchTerm,
+    })
       .then((data: AuthorsResponse) => {
         setAuthors(data.items);
-        setFilteredAuthors(data.items);
-        setTotalItems(data.itemsCount);
+        setTotalItems(data.totalItemsCount);
       })
       .catch((error) => {
         console.error('Failed to fetch authors:', error);
@@ -91,18 +89,22 @@ export default function Authors() {
           description: 'Nie udało się pobrać listy autorów.',
         });
       });
-  };
+  }, [showRemoved, pageSize, pageNumber, searchTerm, toast]);
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      fetchAuthors();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [fetchAuthors]);
+
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const term = event.target.value.toLowerCase();
+    const term = event.target.value;
     setSearchTerm(term);
-    const filtered = authors.filter(
-      (author) =>
-        author.firstName.toLowerCase().includes(term) ||
-        author.lastName.toLowerCase().includes(term) ||
-        author.country.toLowerCase().includes(term),
-    );
-    setFilteredAuthors(filtered);
+    setPageNumber(1);
   };
 
   const handlePreviousPage = () => {
@@ -113,7 +115,6 @@ export default function Authors() {
 
   const handleNextPage = () => {
     setPageNumber(pageNumber + 1);
-    fetchAuthors();
   };
 
   const handleAuthorAdded = () => {
@@ -225,7 +226,7 @@ export default function Authors() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAuthors.map((author) => (
+              {authors.map((author) => (
                 <TableRow key={author.id}>
                   <TableCell className="font-medium text-black">
                     {author.firstName}
@@ -305,7 +306,7 @@ export default function Authors() {
               variant="outline"
               size="sm"
               onClick={handleNextPage}
-              // disabled={pageNumber >= Math.ceil(totalItems / pageSize)}
+              disabled={pageNumber * pageSize >= totalItems}
             >
               Następna strona
               <ChevronRight className="h-4 w-4" />

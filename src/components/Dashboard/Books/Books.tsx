@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   MoreHorizontal,
   Search,
@@ -55,6 +55,7 @@ interface Author {
 
 interface BooksResponse {
   itemsCount: number;
+  totalItemsCount: number;
   pageNumber: number;
   pageSize: number;
   items: Book[];
@@ -63,7 +64,6 @@ interface BooksResponse {
 export default function Books() {
   const [searchTerm, setSearchTerm] = useState('');
   const [books, setBooks] = useState<Book[]>([]);
-  const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(50);
   const [totalItems, setTotalItems] = useState(0);
@@ -74,16 +74,16 @@ export default function Books() {
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    fetchBooks();
-  }, [pageNumber, pageSize, showRemoved]);
-
-  const fetchBooks = () => {
-    BookService.getBooks({ showRemoved, pageSize, pageNumber })
+  const fetchBooks = useCallback(() => {
+    BookService.getBooks({
+      showRemoved,
+      pageSize,
+      pageNumber,
+      title: searchTerm,
+    })
       .then((data: BooksResponse) => {
         setBooks(data.items);
-        setFilteredBooks(data.items);
-        setTotalItems(data.itemsCount);
+        setTotalItems(data.totalItemsCount);
       })
       .catch((error) => {
         console.error('Failed to fetch books:', error);
@@ -93,15 +93,20 @@ export default function Books() {
           description: 'Nie udało się pobrać listy książek.',
         });
       });
-  };
+  }, [showRemoved, pageSize, pageNumber, searchTerm, toast]);
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      fetchBooks();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [fetchBooks]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const term = event.target.value.toLowerCase();
+    const term = event.target.value;
     setSearchTerm(term);
-    const filtered = books.filter((book) =>
-      book.title.toLowerCase().includes(term),
-    );
-    setFilteredBooks(filtered);
+    setPageNumber(1);
   };
 
   const handlePreviousPage = () => {
@@ -128,13 +133,7 @@ export default function Books() {
       setIsDeleting(true);
       try {
         await BookService.deleteBook(bookToDelete);
-        // Optimistically update state (remove deleted book)
-        setBooks((prevBooks) =>
-          prevBooks.filter((book) => book.id !== bookToDelete),
-        );
-        setFilteredBooks((prevBooks) =>
-          prevBooks.filter((book) => book.id !== bookToDelete),
-        );
+        fetchBooks();
         toast({
           title: 'Sukces',
           description: 'Książka została usunięta pomyślnie.',
@@ -209,7 +208,7 @@ export default function Books() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredBooks.map((book) => (
+              {books.map((book) => (
                 <TableRow key={book.id}>
                   <TableCell className="font-medium text-black">
                     {book.title}
@@ -270,7 +269,7 @@ export default function Books() {
             Showing {(pageNumber - 1) * pageSize + 1}-
             {Math.min(pageNumber * pageSize, totalItems)} of {totalItems} items
           </p>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 text-black">
             <Button
               variant="outline"
               size="sm"
@@ -278,6 +277,7 @@ export default function Books() {
               disabled={pageNumber === 1}
             >
               <ChevronLeft className="h-4 w-4" />
+              Poprzednia strona
             </Button>
             <Button
               variant="outline"
@@ -285,6 +285,7 @@ export default function Books() {
               onClick={handleNextPage}
               disabled={pageNumber * pageSize >= totalItems}
             >
+              Następna strona
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

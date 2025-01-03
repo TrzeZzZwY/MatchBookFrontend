@@ -9,11 +9,17 @@ interface Author {
 }
 
 const AuthorService = {
-  getAuthors({ showRemoved = false, pageSize = 50, pageNumber = 1 } = {}) {
+  getAuthors({
+    showRemoved = false,
+    pageSize = 50,
+    pageNumber = 1,
+    authorName = '',
+  } = {}) {
     const promise = RequestService.get('/api/Author', {
       showRemoved,
       pageSize,
       pageNumber,
+      authorName,
     }).then((response) => response.data);
 
     return CancelablePromise(promise);
