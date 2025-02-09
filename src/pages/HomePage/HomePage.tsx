@@ -14,6 +14,7 @@ import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeSwitcher/ThemeSwitcher';
 import { ReactNode } from 'react';
+import bookBig from '@/assets/img/book_big.png';
 
 const navItems = [
   { id: 'home', label: 'Strona główna' },
@@ -153,10 +154,11 @@ export default function Home() {
           <div className="relative min-h-screen w-full overflow-hidden">
             <div className="absolute inset-0">
               <img
-                src="src\assets\img\book_big.png"
+                src={bookBig}
                 alt="Tło główne"
                 className="kenburns-top h-full w-full object-cover object-center"
               />
+              ;
               <div className="absolute inset-0 bg-gradient-to-r from-background/95" />
             </div>
             <div className="container relative mx-auto min-h-screen px-4 py-16 md:py-24 lg:py-64">
@@ -372,7 +374,7 @@ export default function Home() {
                   <motion.div key={member.name} variants={fadeInUp}>
                     <TeamMemberCard
                       {...member}
-                      animationDelay={`${index * 0.2}s`}
+                      animationDelay={`${index * 0.3}s`}
                     />
                   </motion.div>
                 ))}
