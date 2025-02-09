@@ -1,4 +1,4 @@
-import { BookOpen, Users, MapPin, MessageSquare } from 'lucide-react';
+import { BookOpen, MapPin, MessageSquare } from 'lucide-react';
 
 export const features = [
   {
