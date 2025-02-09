@@ -8,6 +8,7 @@ import Books from '@/components/Dashboard/Books/Books';
 import Authors from '@/components/Dashboard/Authors/Authors';
 import Reports from '@/components/Dashboard/Reports/Reports';
 import BookPoint from '@/components/Dashboard/BookPoint/BookPoint';
+import { ThemeProvider } from '@/providers';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -32,14 +33,16 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background md:h-screen">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <main className="flex-1 overflow-auto p-1 md:p-6">
-          {renderContent()}
-        </main>
+    <ThemeProvider>
+      <div className="flex h-screen overflow-hidden bg-background md:h-screen">
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <main className="flex-1 overflow-auto p-1 md:p-6">
+            {renderContent()}
+          </main>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 

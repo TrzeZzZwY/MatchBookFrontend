@@ -11,6 +11,8 @@ import { TeamMemberCard } from '@/components/TeamMemberCard/TeamMemberCard';
 import { teamMembers } from '@/data/teamMembers';
 import { steps } from '@/data/steps';
 import { features } from '@/data/features';
+import { motion } from 'framer-motion';
+import { useInView } from '@/hooks/useInView';
 
 const navItems = [
   { id: 'home', label: 'Strona główna' },
@@ -23,6 +25,12 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
+
+  const [heroRef, heroInView] = useInView({ threshold: 0.2 });
+  const [featuresRef, featuresInView] = useInView({ threshold: 0.2 });
+  const [appShowcaseRef, appShowcaseInView] = useInView({ threshold: 0.2 });
+  const [howToRef, howToInView] = useInView({ threshold: 0.2 });
+  const [teamRef, teamInView] = useInView({ threshold: 0.2 });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,7 +59,12 @@ export default function Home() {
     <>
       <main className="relative min-h-screen">
         {/* Navigation */}
-        <nav className="fixed top-0 z-50 w-full bg-background/95 backdrop-blur transition-all duration-300 supports-[backdrop-filter]:bg-background/60">
+        <motion.nav
+          className="fixed top-0 z-50 w-full bg-background/95 backdrop-blur transition-all duration-300 supports-[backdrop-filter]:bg-background/60"
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="container mx-auto px-4">
             <div className="flex h-16 items-center justify-between">
               <Link to="/" className="flex items-center space-x-2">
@@ -110,12 +123,15 @@ export default function Home() {
               </div>
             </div>
           )}
-        </nav>
+        </motion.nav>
 
         {/* Hero Section */}
         <section
           id="home"
-          ref={(el) => (sectionRefs.current['home'] = el)}
+          ref={(el) => {
+            sectionRefs.current['home'] = el;
+            heroRef.current = el;
+          }}
           className="relative min-h-screen w-full overflow-hidden"
         >
           <div className="absolute inset-0">
@@ -128,31 +144,39 @@ export default function Home() {
           </div>
           <div className="container relative mx-auto min-h-screen px-4 py-16 md:py-24 lg:py-64">
             <div className="grid items-center gap-8 lg:grid-cols-2">
-              <div className="space-y-8">
+              <motion.div
+                className="space-y-8"
+                initial={{ opacity: 0, x: -50 }}
+                animate={heroInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
                 <div className="space-y-4">
                   <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
                     Odkryj Swoją Następną{' '}
                     <span className="text-primary">Idealną Książkę</span>
                   </h1>
                   <p className="max-w-[600px] text-lg md:text-xl">
-                    MatchBook pomoże Ci wymieniać się książkami z innymi osobami
-                    na podstawie Twoich zainteresowań i preferencji.
+                    MatchBook pomoże Ci znaleźć idealną książkę na podstawie
+                    Twoich zainteresowań i osobistych preferencji.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-4">
                   <Button size="lg" className="animate-float gap-2">
                     <Download className="h-5 w-5" /> Rozpocznij
                   </Button>
-                  <a href="#how-to">
-                    <Button size="lg" variant="secondary" className="gap-2">
-                      <BookOpen className="h-5 w-5" /> Jak to działa
-                    </Button>
-                  </a>
+                  <Button size="lg" variant="secondary" className="gap-2">
+                    <BookOpen className="h-5 w-5" /> Jak to działa
+                  </Button>
                 </div>
-              </div>
-              <div className="relative mx-auto aspect-[3/4] w-full max-w-[500px]">
+              </motion.div>
+              <motion.div
+                className="relative mx-auto aspect-[3/4] w-full max-w-[500px]"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={heroInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
                 <LogoSvg />
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -160,39 +184,53 @@ export default function Home() {
         {/* Features Section */}
         <section
           id="app"
-          ref={(el) => (sectionRefs.current['app'] = el)}
+          ref={(el) => {
+            sectionRefs.current['app'] = el;
+            featuresRef.current = el;
+          }}
           className="skewed-top skewed-bottom bg-background"
         >
           <div className="container mx-auto px-4 py-24">
-            <div className="mb-12 text-center">
+            <motion.div
+              className="mb-12 text-center"
+              initial={{ opacity: 0, y: 50 }}
+              animate={featuresInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+            >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 Dlaczego MatchBook?
               </h2>
               <p className="mt-4 animate-pulse text-lg text-muted-foreground">
                 Odkryj funkcje, które sprawią, że znalezienie następnej książki
-                będzie niezwykle proste
+                będzie proste
               </p>
-            </div>
+            </motion.div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature, index) => (
-                <div
+                <motion.div
                   key={index}
                   className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={featuresInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <div className="mb-4 inline-block rounded-lg bg-primary/10 p-3 text-primary">
                     {feature.icon}
                   </div>
                   <h3 className="mb-2 text-xl font-bold">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
         {/* App Showcase Section */}
-        <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-primary to-primary-foreground py-24">
+        <section
+          ref={(el) => (appShowcaseRef.current = el)}
+          className="relative min-h-screen overflow-hidden bg-gradient-to-br from-primary to-primary-foreground py-24"
+        >
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent)]" />
             {/* Add decorative stars */}
@@ -202,23 +240,31 @@ export default function Home() {
           </div>
 
           <div className="container relative mx-auto px-4">
-            <div className="mb-16 text-center text-white">
+            <motion.div
+              className="mb-16 text-center text-white"
+              initial={{ opacity: 0, y: 50 }}
+              animate={appShowcaseInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+            >
               <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                 Wiele możliwości
               </h2>
               <p className="mt-4 animate-pulse text-lg text-white/80 md:text-xl">
                 Odkryj wszystkie funkcje naszej aplikacji
               </p>
-            </div>
+            </motion.div>
 
             <div className="relative mx-auto max-w-6xl">
               <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
                 {[...Array(6)].map((_, i) => (
-                  <div
+                  <motion.div
                     key={i}
                     className={`transform transition-all duration-500 hover:scale-105 ${
                       i % 2 === 0 ? 'translate-y-8' : '-translate-y-8'
                     }`}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={appShowcaseInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
                   >
                     <img
                       src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/test-5dXmeJr4tZVqPCRgm1urUdNZk4cPXJ.png"
@@ -227,7 +273,7 @@ export default function Home() {
                       height={800}
                       className="rounded-2xl shadow-2xl"
                     />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -237,23 +283,37 @@ export default function Home() {
         {/* How It Works Section */}
         <section
           id="how-to"
-          ref={(el) => (sectionRefs.current['how-to'] = el)}
+          ref={(el) => {
+            sectionRefs.current['how-to'] = el;
+            howToRef.current = el;
+          }}
           className="skewed-top bg-background py-24"
         >
           <div className="container mx-auto px-4">
-            <div className="mb-12 text-center">
+            <motion.div
+              className="mb-12 text-center"
+              initial={{ opacity: 0, y: 50 }}
+              animate={howToInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+            >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 Jak korzystać z MatchBook
               </h2>
               <p className="mt-4 animate-pulse text-lg text-muted-foreground">
                 Rozpocznij w kilku prostych krokach
               </p>
-            </div>
+            </motion.div>
 
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-8">
                 {steps.map((step, index) => (
-                  <div key={index} className="flex gap-4">
+                  <motion.div
+                    key={index}
+                    className="flex gap-4"
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={howToInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
                       {index + 1}
                     </div>
@@ -263,19 +323,20 @@ export default function Home() {
                         {step.description}
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-              <div className="relative mx-auto aspect-video w-full max-w-[600px] overflow-hidden rounded-xl">
-                <video
-                  className="h-full w-full object-cover"
-                  //   poster="/placeholder.svg?height=400&width=600"
-                  controls
-                >
+              <motion.div
+                className="relative mx-auto aspect-video w-full max-w-[600px] overflow-hidden rounded-xl"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={howToInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <video className="h-full w-full object-cover" controls>
                   <source src="#" type="video/mp4" />
                   Twoja przeglądarka nie wspiera odtwarzania wideo.
                 </video>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -283,34 +344,53 @@ export default function Home() {
         {/* Team Section */}
         <section
           id="team"
-          ref={(el) => (sectionRefs.current['team'] = el)}
+          ref={(el) => {
+            sectionRefs.current['team'] = el;
+            teamRef.current = el;
+          }}
           className="bg-secondary/30 py-24"
         >
           <div className="container mx-auto px-4">
-            <div className="mb-16 text-center">
+            <motion.div
+              className="mb-16 text-center"
+              initial={{ opacity: 0, y: 50 }}
+              animate={teamInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+            >
               <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                 Poznaj Nasz Zespół
               </h2>
               <p className="mt-4 animate-pulse text-lg text-muted-foreground">
                 Pasjonaci książek i technologii, którzy stoją za MatchBook
               </p>
-            </div>
+            </motion.div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {teamMembers.map((member, index) => (
-                <TeamMemberCard
+                <motion.div
                   key={member.name}
-                  {...member}
-                  animationDelay={`${index * 0.2}s`}
-                />
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={teamInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <TeamMemberCard
+                    {...member}
+                    animationDelay={`${index * 0.2}s`}
+                  />
+                </motion.div>
               ))}
             </div>
 
-            <div className="mt-16 text-center">
+            <motion.div
+              className="mt-16 text-center"
+              initial={{ opacity: 0, y: 50 }}
+              animate={teamInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
               <Button size="lg" variant="outline" className="animate-bounce">
                 Dołącz do Nas
               </Button>
-            </div>
+            </motion.div>
           </div>
         </section>
       </main>

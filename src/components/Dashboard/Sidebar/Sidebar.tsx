@@ -18,6 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from '@/components/ThemeSwitcher/ThemeSwitcher';
 
 const sidebarItems = [
   { icon: Home, label: 'Panel', id: 'dashboard' },
@@ -29,6 +30,7 @@ const sidebarItems = [
   { icon: MapPin, label: 'Punkty książek', id: 'bookpoints' },
   { icon: Settings, label: 'Ustawienia', id: 'settings' },
 ];
+
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -63,16 +65,19 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         isSidebarCollapsed ? 'w-16' : 'w-64',
       )}
     >
-      <div className="flex h-14 items-center p-4">
-        <Library className="mr-2 h-8 w-8" />
-        <h1
-          className={cn(
-            'text-xl font-bold transition-opacity duration-300',
-            isSidebarCollapsed && 'opacity-0',
-          )}
-        >
-          MatchBook
-        </h1>
+      <div className="flex h-14 items-center justify-between p-4">
+        <a className="flex items-center" href="/">
+          <Library className="mr-2 h-8 w-8" />
+          <h1
+            className={cn(
+              'text-xl font-bold transition-opacity duration-300',
+              isSidebarCollapsed && 'opacity-0',
+            )}
+          >
+            MatchBook
+          </h1>
+        </a>
+        <ThemeToggle />
       </div>
       <ScrollArea className="flex-1">
         <nav className="p-2">
