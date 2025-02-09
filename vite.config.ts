@@ -5,6 +5,18 @@ import viteImagemin from 'vite-plugin-imagemin';
 import path from 'path';
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+
+    rollupOptions: {
+      onLog(level, log, handler) {
+        if (log.cause) {
+          return;
+        }
+        handler(level, log);
+      },
+    },
+  },
   plugins: [
     react(),
     eslintPlugin(),
