@@ -1,93 +1,107 @@
-import Wrapper from '../Wrapper/Wrapper';
-import './Footer.scss';
-import '../Section/Section.scss';
+import { Book, Github, Twitter } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export default function Footer() {
+export function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="footerContainer mt-20 w-full bg-sunflower-50 dark:bg-sunflower-950">
-      <div className="white-block white-block-dark"></div>
-
-      <Wrapper>
-        <div className="mt-10 flex flex-col items-center justify-between text-lg md:flex-row">
-          <ul className="mb-4 flex flex-col items-center font-semibold md:mb-0 md:flex-row	">
-            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
-              >
-                O nas
-              </a>
-            </li>
-            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
-              >
-                Zarząd
-              </a>
-            </li>
-            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
-              >
-                Kariera
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
-              >
-                FAQ
-              </a>
-            </li>
-          </ul>
-          <ul className="flex flex-col items-center font-semibold md:flex-row	">
-            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
-              >
-                Polityka prywatności
-              </a>
-            </li>
-            <li className="mb-2 mr-0 md:mb-0 md:mr-4">
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
-              >
-                Regulamin
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sunflower-700 hover:text-sunflower-600 dark:text-gray-300 dark:hover:text-sunflower-400"
-              >
-                Kontakt
-              </a>
-            </li>
-          </ul>
+    <footer className="border-t bg-background">
+      <div className="container px-4 py-12">
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="space-y-4">
+            <a href="/" className="flex items-center space-x-2">
+              <Book className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold">MatchBook</span>
+            </a>
+            <p className="text-sm text-muted-foreground">
+              Odkryj swoją następną idealną książkę dzięki naszej aplikacji
+              rekomendującej książki zasilanej przez AI.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-2">
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold">Produkt</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a
+                    href="/features"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Funkcje
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#how-to"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Jak to działa
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/pricing"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Cennik
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold">Firma</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a
+                    href="/about-us"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    O nas
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/blog"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/careers"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Kariera
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold">Kontakt</h4>
+              <div className="flex space-x-4">
+                <a
+                  href="https://twitter.com"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Twitter className="h-5 w-5" />
+                  <span className="sr-only">Twitter</span>
+                </a>
+                <a
+                  href="https://github.com"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Github className="h-5 w-5" />
+                  <span className="sr-only">GitHub</span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <p className="my-5 text-center text-sunflower-800 dark:text-gray-200">
-          &copy; 2024 MatchBook All rights reserved
-        </p>
-      </Wrapper>
+        <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
+          <p>© {currentYear} MatchBook. Wszelkie prawa zastrzeżone.</p>
+        </div>
+      </div>
     </footer>
   );
 }
