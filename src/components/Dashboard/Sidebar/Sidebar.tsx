@@ -9,11 +9,9 @@ import {
   Home,
   Library,
   LogOut,
-  Settings,
   Users,
   FileText,
   AlertTriangle,
-  MapPin,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -29,8 +27,6 @@ const sidebarItems = [
   { icon: FileText, label: 'Autorzy', id: 'authors' },
   { icon: BookOpen, label: 'Wypożyczenia', id: 'rentals' },
   { icon: AlertTriangle, label: 'Zgłoszenia', id: 'reports' },
-  { icon: MapPin, label: 'Punkty książek', id: 'bookpoints' },
-  { icon: Settings, label: 'Ustawienia', id: 'settings' },
 ];
 
 interface SidebarProps {

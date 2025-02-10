@@ -39,6 +39,7 @@ import BookService from './services/BooksService';
 import { EditBookDialog } from './components/EditBookDialog/EditBookDialog';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
+import { AddBookDialog } from './components/AddBookDialog/AddBookDialog';
 
 interface Book {
   id: number;
@@ -115,6 +116,14 @@ export default function Books() {
     }
   };
 
+  const handleBookAdded = () => {
+    fetchBooks();
+    toast({
+      title: 'Sukces',
+      description: 'Książka została dodana pomyślnie.',
+    });
+  };
+
   const handleNextPage = () => {
     setPageNumber(pageNumber + 1);
   };
@@ -158,6 +167,7 @@ export default function Books() {
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
           <h1 className="text-2xl font-bold text-black md:text-3xl">Książki</h1>
+          <AddBookDialog onBookAdded={handleBookAdded} />
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">

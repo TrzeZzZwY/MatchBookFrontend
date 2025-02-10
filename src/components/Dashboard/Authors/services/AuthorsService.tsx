@@ -15,7 +15,7 @@ const AuthorService = {
     pageNumber = 1,
     authorName = '',
   } = {}) {
-    const promise = RequestService.get('/api/Author', {
+    const promise = RequestService.get('book', '/api/Author', {
       showRemoved,
       pageSize,
       pageNumber,
@@ -26,7 +26,7 @@ const AuthorService = {
   },
 
   addAuthor(author: Author) {
-    const promise = RequestService.post('/api/Author', author).then(
+    const promise = RequestService.post('book', '/api/Author', author).then(
       (response) => response.data,
     );
 
@@ -34,17 +34,20 @@ const AuthorService = {
   },
 
   updateAuthor(authorId: number, author: Author) {
-    const promise = RequestService.put(`/api/Author/${authorId}`, author).then(
-      (response) => response.data,
-    );
+    const promise = RequestService.put(
+      'book',
+      `/api/Author/${authorId}`,
+      author,
+    ).then((response) => response.data);
 
     return CancelablePromise(promise);
   },
 
   deleteAuthor(authorId: number) {
-    const promise = RequestService.delete(`/api/Author/${authorId}`).then(
-      (response) => response.data,
-    );
+    const promise = RequestService.delete(
+      'book',
+      `/api/Author/${authorId}`,
+    ).then((response) => response.data);
 
     return CancelablePromise(promise);
   },

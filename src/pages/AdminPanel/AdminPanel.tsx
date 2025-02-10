@@ -7,7 +7,6 @@ import Users from '@/components/Dashboard/Users/Users';
 import Books from '@/components/Dashboard/Books/Books';
 import Authors from '@/components/Dashboard/Authors/Authors';
 import Reports from '@/components/Dashboard/Reports/Reports';
-import BookPoint from '@/components/Dashboard/BookPoint/BookPoint';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -46,8 +45,6 @@ const AdminPanel = () => {
         return <Authors />;
       case 'reports':
         return <Reports />;
-      case 'bookpoints':
-        return <BookPoint />;
       default:
         return <div>Content for {activeTab}</div>;
     }
