@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -58,18 +58,6 @@ const AdminPanel = () => {
       <div className="flex h-screen overflow-hidden bg-background md:h-screen">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="flex flex-1 flex-col overflow-hidden">
-          <header className="flex justify-between border-b p-4">
-            <h1 className="text-xl font-semibold">Admin Panel</h1>
-            <button
-              onClick={() => {
-                logout();
-                navigate('/login');
-              }}
-              className="rounded bg-red-500 px-4 py-2 text-white"
-            >
-              Logout
-            </button>
-          </header>
           <main className="flex-1 overflow-auto p-1 md:p-6">
             {renderContent()}
           </main>

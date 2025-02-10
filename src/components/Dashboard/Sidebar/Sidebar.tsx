@@ -19,6 +19,8 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ThemeSwitcher/ThemeSwitcher';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const sidebarItems = [
   { icon: Home, label: 'Panel', id: 'dashboard' },
@@ -39,6 +41,8 @@ interface SidebarProps {
 export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -53,6 +57,11 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       window.removeEventListener('resize', checkScreenSize);
     };
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -109,12 +118,15 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           </ul>
         </nav>
       </ScrollArea>
+
+      {/* Logout Button */}
       <Button
         variant="ghost"
         className={cn(
-          'mb-4 mt-auto text-muted-foreground',
+          'mb-4 mt-auto transition-all duration-300',
           isSidebarCollapsed && 'justify-center px-0',
         )}
+        onClick={handleLogout}
       >
         <LogOut className={cn('h-5 w-5', !isSidebarCollapsed && 'mr-2')} />
         <span
@@ -126,6 +138,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           Logout
         </span>
       </Button>
+
       <Button
         variant="ghost"
         size="icon"
