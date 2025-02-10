@@ -1,4 +1,4 @@
 {
   "BOOK_SERVICE_URL": "https://localhost:8100",
-  "ACCOUNT_SERVICE_URL": "https://localhost:8000"
+  "ACCOUNT_SERVICE_URL": "http://localhost:8900"
 }

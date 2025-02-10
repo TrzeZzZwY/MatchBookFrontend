@@ -1,20 +1,65 @@
 import axios from 'axios';
-import { BOOK_SERVICE_URL } from '../../config.json';
+import { BOOK_SERVICE_URL, ACCOUNT_SERVICE_URL } from '../../config.json';
+import TokenService from './TokenService';
 
-const BASE_URL = BOOK_SERVICE_URL;
+const getBaseUrl = (service: 'book' | 'account') => {
+  switch (service) {
+    case 'book':
+      return BOOK_SERVICE_URL;
+    case 'account':
+      return ACCOUNT_SERVICE_URL;
+    default:
+      throw new Error(`Unknown service: ${service}`);
+  }
+};
+
+const instance = axios.create();
+
+instance.interceptors.request.use(
+  async (config) => {
+    const token = TokenService.getAccessToken();
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+instance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        await TokenService.refreshToken();
+        originalRequest.headers[
+          'Authorization'
+        ] = `Bearer ${TokenService.getAccessToken()}`;
+        return instance(originalRequest);
+      } catch (refreshError) {
+        TokenService.logout();
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  },
+);
 
 const RequestService = {
-  get: (url: string, params = {}, headers = {}) => {
-    return axios.get(`${BASE_URL}${url}`, { params, headers });
+  get: (service: 'book' | 'account', url: string, params = {}) => {
+    return instance.get(`${getBaseUrl(service)}${url}`, { params });
   },
-  post: (url: string, data = {}, headers = {}) => {
-    return axios.post(`${BASE_URL}${url}`, data, { headers });
+  post: (service: 'book' | 'account', url: string, data = {}) => {
+    console.log(`${getBaseUrl(service)}${url}`);
+    return instance.post(`${getBaseUrl(service)}${url}`, data);
   },
-  put: (url: string, data = {}, headers = {}) => {
-    return axios.put(`${BASE_URL}${url}`, data, { headers });
+  put: (service: 'book' | 'account', url: string, data = {}) => {
+    return instance.put(`${getBaseUrl(service)}${url}`, data);
   },
-  delete: (url: string, headers = {}) => {
-    return axios.delete(`${BASE_URL}${url}`, { headers });
+  delete: (service: 'book' | 'account', url: string) => {
+    return instance.delete(`${getBaseUrl(service)}${url}`);
   },
 };
 
