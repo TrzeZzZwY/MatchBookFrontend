@@ -27,7 +27,6 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Check if tokens exist and redirect if valid
   useEffect(() => {
     const storedEmail = localStorage.getItem('adminEmail');
     if (storedEmail) {
@@ -38,7 +37,7 @@ const Login = () => {
     const checkTokens = async () => {
       const token = await TokenService.getAccessToken();
       if (token) {
-        navigate('/admin-panel'); // ✅ Redirect if token exists
+        navigate('/admin-panel');
       }
     };
 
@@ -85,7 +84,7 @@ const Login = () => {
           localStorage.removeItem('adminEmail');
         }
 
-        window.location.href = '/admin-panel'; // ✅ Full refresh ensures session consistency
+        window.location.href = '/admin-panel';
       } else {
         setError('Nieprawidłowe dane logowania. Spróbuj ponownie.');
       }
@@ -105,9 +104,8 @@ const Login = () => {
     >
       <div className="absolute inset-0 bg-background/50 backdrop-blur-sm" />
 
-      <Card className="relative w-full max-w-md bg-background/80 backdrop-blur-sm">
-	  {/* <Card className="relative w-full max-w-md bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg"> */}
-
+      {/* <Card className="relative w-full max-w-md bg-background/80 backdrop-blur-sm"> */}
+      <Card className="relative w-full max-w-md border border-white/20 bg-white/10 shadow-lg backdrop-blur-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-center text-2xl font-bold">
             Panel administratora
@@ -132,7 +130,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-background/80 backdrop-blur-sm"
+                className="w-full bg-background/70 backdrop-blur-sm"
               />
             </div>
             <div className="space-y-2">
@@ -144,7 +142,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full bg-background/80 pr-10 backdrop-blur-sm"
+                  className="w-full bg-background/70 pr-10 backdrop-blur-sm"
                 />
                 <button
                   type="button"

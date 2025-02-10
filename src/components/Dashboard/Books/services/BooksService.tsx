@@ -22,7 +22,7 @@ const BookService = {
     includeBookAuthors = true,
     title = '',
   }: GetBooksParams = {}) {
-    const promise = RequestService.get('/api/Book', {
+    const promise = RequestService.get('book', '/api/Book', {
       showRemoved,
       pageSize,
       pageNumber,
@@ -34,7 +34,7 @@ const BookService = {
   },
 
   addBook(book: Book) {
-    const promise = RequestService.post('/api/Book', book).then(
+    const promise = RequestService.post('book', '/api/Book', book).then(
       (response) => response.data,
     );
 
@@ -44,15 +44,17 @@ const BookService = {
   updateBook(bookId: number, book: Book) {
     console.log('bookId:', bookId);
     console.log('book:', book);
-    const promise = RequestService.put(`/api/Book/${bookId}`, book).then(
-      (response) => response.data,
-    );
+    const promise = RequestService.put(
+      `book`,
+      `/api/Book/${bookId}`,
+      book,
+    ).then((response) => response.data);
 
     return CancelablePromise(promise);
   },
 
   deleteBook(bookId: number) {
-    const promise = RequestService.delete(`/api/Book/${bookId}`).then(
+    const promise = RequestService.delete('book', `/api/Book/${bookId}`).then(
       (response) => response.data,
     );
 

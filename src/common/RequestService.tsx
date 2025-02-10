@@ -19,6 +19,7 @@ instance.interceptors.request.use(
   async (config) => {
     const token = TokenService.getAccessToken();
     if (token) {
+      console.log('token:', token);
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
@@ -30,6 +31,7 @@ instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    console.log('originalRequest:', originalRequest);
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {

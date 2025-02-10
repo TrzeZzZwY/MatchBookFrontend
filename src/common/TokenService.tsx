@@ -24,10 +24,18 @@ class TokenService {
 
   static async refreshToken(): Promise<void> {
     try {
+      const refreshToken = this.getRefreshToken();
+      const accessToken = this.getAccessToken();
+      if (!refreshToken) throw new Error('No refresh token available');
+
       const response = await axios.post(
-        'https://localhost:8900/api/Admin/RefreshToken',
+        'http://localhost:8900/api/Auth/refresh',
+        { refreshToken },
         {
-          refreshToken: this.getRefreshToken(),
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
         },
       );
 
