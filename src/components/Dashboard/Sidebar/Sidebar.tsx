@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import {
   Book,
-  BookOpen,
   ChevronLeft,
   ChevronRight,
   Home,
@@ -22,10 +21,9 @@ import { useNavigate } from 'react-router-dom';
 
 const sidebarItems = [
   { icon: Home, label: 'Panel', id: 'dashboard' },
+  { icon: FileText, label: 'Autorzy', id: 'authors' },
   { icon: Book, label: 'Książki', id: 'books' },
   { icon: Users, label: 'Użytkownicy', id: 'users' },
-  { icon: FileText, label: 'Autorzy', id: 'authors' },
-  { icon: BookOpen, label: 'Wypożyczenia', id: 'rentals' },
   { icon: AlertTriangle, label: 'Zgłoszenia', id: 'reports' },
 ];
 

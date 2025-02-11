@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/select';
 import UserService, { type User } from './services/UsersService';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
+import UserBooksCell from './components/UserBooksCell/UserBooksCell';
 
 export default function Users() {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -48,7 +49,7 @@ export default function Users() {
 
   // Pagination states
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(50);
   const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
@@ -62,8 +63,7 @@ export default function Users() {
     fetchUsers
       .then((data) => {
         setUsers(data.items);
-        // Use totalItemsCount if available (as on your Authors API); otherwise fallback to itemsCount.
-        setTotalItems(data.totalItemsCount ?? data.itemsCount);
+        setTotalItems(data.itemsCount);
       })
       .catch(() => setError('Nie udało się załadować listy użytkowników.'));
 
@@ -101,16 +101,10 @@ export default function Users() {
     }
   };
 
-  const handlePreviousPage = () => {
-    if (pageNumber > 1) {
-      setPageNumber(pageNumber - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    // We disable the button when no more items are available.
-    setPageNumber(pageNumber + 1);
-  };
+  const handlePreviousPage = () =>
+    setPageNumber((prev) => Math.max(prev - 1, 1));
+  const handleNextPage = () =>
+    setPageNumber((prev) => (prev * pageSize < totalItems ? prev + 1 : prev));
 
   const renderStatusBadge = (status: 'ACTIVE' | 'BANED' | 'REMOVED') => {
     const statusConfig = {
@@ -147,10 +141,7 @@ export default function Users() {
           <Input
             placeholder="Szukaj użytkowników..."
             value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setPageNumber(1);
-            }}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
           />
         </div>
@@ -199,6 +190,7 @@ export default function Users() {
             <TableHead>Email</TableHead>
             <TableHead>Region</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Książki użytkownika</TableHead>
             <TableHead className="text-right">Akcje</TableHead>
           </TableRow>
         </TableHeader>
@@ -213,6 +205,9 @@ export default function Users() {
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.region}</TableCell>
               <TableCell>{renderStatusBadge(user.status)}</TableCell>
+              <TableCell>
+                <UserBooksCell userId={user.id} />
+              </TableCell>
               <TableCell className="text-right">
                 {user.status !== 'REMOVED' && (
                   <DropdownMenu>
