@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import type React from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   MoreHorizontal,
   Search,
@@ -62,7 +63,7 @@ export default function Authors() {
   const [searchTerm, setSearchTerm] = useState('');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(50);
+  const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [editingAuthor, setEditingAuthor] = useState<Author | null>(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -169,10 +170,12 @@ export default function Authors() {
   };
 
   return (
-    <ScrollArea className="h-full">
+    <ScrollArea className="h-full bg-background text-foreground">
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-          <h1 className="text-2xl font-bold text-black md:text-3xl">Autorzy</h1>
+          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
+            Autorzy
+          </h1>
           <AddAuthorDialog onAuthorAdded={handleAuthorAdded} />
         </div>
         <div className="flex items-center space-x-4">
@@ -182,14 +185,14 @@ export default function Authors() {
               placeholder="Szukaj autorów..."
               value={searchTerm}
               onChange={handleSearch}
-              className="max-w-sm text-black"
+              className="max-w-sm text-foreground"
             />
           </div>
           <Select
             value={pageSize.toString()}
             onValueChange={(value) => setPageSize(Number(value))}
           >
-            <SelectTrigger className="w-[180px] text-black">
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Wybierz rozmiar strony" />
             </SelectTrigger>
             <SelectContent>
@@ -199,7 +202,7 @@ export default function Authors() {
               <SelectItem value="100">100 na stronę</SelectItem>
             </SelectContent>
           </Select>
-          <div className="flex items-center space-x-2 text-black">
+          <div className="flex items-center space-x-2 text-foreground">
             <Checkbox
               id="showRemoved"
               checked={showRemoved}
@@ -213,45 +216,51 @@ export default function Authors() {
             </label>
           </div>
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border dark:border-gray-700">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[200px] text-black">Imię</TableHead>
-                <TableHead className="w-[200px] text-black">Nazwisko</TableHead>
-                <TableHead className="text-black">Kraj</TableHead>
-                <TableHead className="text-black">Rok urodzenia</TableHead>
-                <TableHead className="text-black">Status</TableHead>
-                <TableHead className="text-right text-black">Akcje</TableHead>
+                <TableHead className="w-[200px] text-foreground">
+                  Imię
+                </TableHead>
+                <TableHead className="w-[200px] text-foreground">
+                  Nazwisko
+                </TableHead>
+                <TableHead className="text-foreground">Kraj</TableHead>
+                <TableHead className="text-foreground">Rok urodzenia</TableHead>
+                <TableHead className="text-foreground">Status</TableHead>
+                <TableHead className="text-right text-foreground">
+                  Akcje
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {authors.map((author) => (
                 <TableRow key={author.id}>
-                  <TableCell className="font-medium text-black">
+                  <TableCell className="font-medium text-foreground">
                     {author.firstName}
                   </TableCell>
-                  <TableCell className="font-medium text-black">
+                  <TableCell className="font-medium text-foreground">
                     {author.lastName}
                   </TableCell>
-                  <TableCell className="font-medium text-black">
+                  <TableCell className="font-medium text-foreground">
                     {author.country}
                   </TableCell>
-                  <TableCell className="font-medium text-black">
+                  <TableCell className="font-medium text-foreground">
                     {author.yearOfBirth}
                   </TableCell>
                   <TableCell>
                     <span
                       className={`rounded-full px-2 py-1 text-xs ${
                         author.isRemoved == false
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                       }`}
                     >
                       {author.isRemoved ? 'Usunięty' : 'Aktywny'}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right text-black">
+                  <TableCell className="text-right text-foreground">
                     {author.isRemoved == false ? (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -261,12 +270,12 @@ export default function Authors() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel className="text-black">
+                          <DropdownMenuLabel className="text-foreground">
                             Akcje
                           </DropdownMenuLabel>
                           <DropdownMenuItem
                             onClick={() => handleEditAuthor(author)}
-                            className="text-black"
+                            className="text-foreground"
                           >
                             Edytuj autora
                           </DropdownMenuItem>
@@ -287,12 +296,12 @@ export default function Authors() {
           </Table>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            Showing {(pageNumber - 1) * pageSize + 1} to{' '}
-            {Math.min(pageNumber * pageSize, totalItems)} of {totalItems}{' '}
-            authors
+          <p className="text-sm text-muted-foreground">
+            Zakres {(pageNumber - 1) * pageSize + 1} -{' '}
+            {Math.min(pageNumber * pageSize, totalItems)} spośród {totalItems}{' '}
+            autorów
           </p>
-          <div className="flex items-center space-x-2 text-black">
+          <div className="flex items-center space-x-2 text-foreground">
             <Button
               variant="outline"
               size="sm"

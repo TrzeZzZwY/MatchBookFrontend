@@ -17,7 +17,7 @@ interface GetBooksParams {
 const BookService = {
   getBooks({
     showRemoved = false,
-    pageSize = 50,
+    pageSize = 10,
     pageNumber = 1,
     includeBookAuthors = true,
     title = '',

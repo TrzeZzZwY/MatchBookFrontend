@@ -1,22 +1,42 @@
 import RequestService from '@/common/RequestService';
+import CancelablePromise from '@/common/CancelablePromise';
 
-class UserService {
-  static async getUsers(pageSize = 50, pageNumber = 1) {
-    try {
-      const response = await RequestService.get('account', '/api/User', {
-        params: { pageSize, pageNumber },
-      });
+export interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  email: string;
+  region: number;
+  status: 'ACTIVE' | 'REMOVED' | 'BANED';
+}
 
+const UserService = {
+  getUsers({ pageSize = 50, pageNumber = 1, fullName = '', status = '' } = {}) {
+    const promise = RequestService.get('account', '/api/User', {
+      pageSize,
+      pageNumber,
+      fullName: fullName.trim() !== '' ? fullName : undefined,
+      status: status !== '' ? status : undefined,
+    }).then((response) => {
       if (response.status === 200) {
         return response.data;
       } else {
         throw new Error('Błąd podczas pobierania użytkowników.');
       }
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      throw new Error('Nie udało się załadować listy użytkowników.');
-    }
-  }
-}
+    });
+
+    return CancelablePromise(promise);
+  },
+
+  updateStatus(userId: number, status: 'ACTIVE' | 'REMOVED' | 'BANED') {
+    const promise = RequestService.post('account', `/account-status`, {
+      userId,
+      status,
+    });
+
+    return CancelablePromise(promise);
+  },
+};
 
 export default UserService;

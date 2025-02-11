@@ -11,7 +11,7 @@ interface Author {
 const AuthorService = {
   getAuthors({
     showRemoved = false,
-    pageSize = 50,
+    pageSize = 10,
     pageNumber = 1,
     authorName = '',
   } = {}) {

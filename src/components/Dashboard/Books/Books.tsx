@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import type React from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   MoreHorizontal,
   Search,
@@ -66,7 +67,7 @@ export default function Books() {
   const [searchTerm, setSearchTerm] = useState('');
   const [books, setBooks] = useState<Book[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(50);
+  const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -163,27 +164,29 @@ export default function Books() {
   };
 
   return (
-    <ScrollArea className="h-full">
+    <ScrollArea className="h-full bg-background text-foreground">
       <div className="space-y-6 p-4 md:p-6">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-          <h1 className="text-2xl font-bold text-black md:text-3xl">Książki</h1>
+          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
+            Książki
+          </h1>
           <AddBookDialog onBookAdded={handleBookAdded} />
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <Search className="h-5 w-5 text-gray-500" />
+            <Search className="h-5 w-5 text-muted-foreground" />
             <Input
               placeholder="Szukaj książek..."
               value={searchTerm}
               onChange={handleSearch}
-              className="max-w-sm text-black"
+              className="max-w-sm"
             />
           </div>
           <Select
             value={pageSize.toString()}
             onValueChange={(value) => setPageSize(Number(value))}
           >
-            <SelectTrigger className="w-[180px] text-black">
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Wybierz rozmiar strony" />
             </SelectTrigger>
             <SelectContent>
@@ -193,7 +196,7 @@ export default function Books() {
               <SelectItem value="100">100 na stronę</SelectItem>
             </SelectContent>
           </Select>
-          <div className="flex items-center space-x-2 text-black">
+          <div className="flex items-center space-x-2 text-foreground">
             <Checkbox
               id="showRemoved"
               checked={showRemoved}
@@ -207,23 +210,25 @@ export default function Books() {
             </label>
           </div>
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border dark:border-gray-700">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="text-black">Tytuł</TableHead>
-                <TableHead className="text-black">Autorzy</TableHead>
-                <TableHead className="text-black">Status</TableHead>
-                <TableHead className="text-right text-black">Akcje</TableHead>
+                <TableHead className="text-foreground">Tytuł</TableHead>
+                <TableHead className="text-foreground">Autorzy</TableHead>
+                <TableHead className="text-foreground">Status</TableHead>
+                <TableHead className="text-right text-foreground">
+                  Akcje
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {books.map((book) => (
                 <TableRow key={book.id}>
-                  <TableCell className="font-medium text-black">
+                  <TableCell className="font-medium text-foreground">
                     {book.title}
                   </TableCell>
-                  <TableCell className="font-medium text-black">
+                  <TableCell className="font-medium text-foreground">
                     {book.authors
                       .map((author) => `${author.firstName} ${author.lastName}`)
                       .join(', ')}
@@ -232,14 +237,14 @@ export default function Books() {
                     <span
                       className={`rounded-full px-2 py-1 text-xs ${
                         book.isRemoved
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-green-100 text-green-800'
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                          : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                       }`}
                     >
                       {book.isRemoved ? 'Usunięty' : 'Aktywny'}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right text-black">
+                  <TableCell className="text-right text-foreground">
                     {book.isRemoved == false ? (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -249,12 +254,12 @@ export default function Books() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel className="text-black">
+                          <DropdownMenuLabel className="text-foreground">
                             Akcje
                           </DropdownMenuLabel>
                           <DropdownMenuItem
                             onClick={() => handleEditBook(book)}
-                            className="text-black"
+                            className="text-foreground"
                           >
                             Edytuj książkę
                           </DropdownMenuItem>
@@ -275,11 +280,12 @@ export default function Books() {
           </Table>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            Showing {(pageNumber - 1) * pageSize + 1}-
-            {Math.min(pageNumber * pageSize, totalItems)} of {totalItems} items
+          <p className="text-sm text-muted-foreground">
+            Zakres {(pageNumber - 1) * pageSize + 1}-{' '}
+            {Math.min(pageNumber * pageSize, totalItems)} spośród {totalItems}{' '}
+            książek
           </p>
-          <div className="flex items-center space-x-2 text-black">
+          <div className="flex items-center space-x-2 text-foreground">
             <Button
               variant="outline"
               size="sm"
