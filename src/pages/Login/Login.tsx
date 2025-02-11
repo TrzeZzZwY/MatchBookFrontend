@@ -15,8 +15,8 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import RequestService from '@/common/RequestService';
 import TokenService from '@/common/TokenService';
+import LoginService from './services/LoginService';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -63,36 +63,15 @@ const Login = () => {
 
     setIsLoading(true);
 
-    try {
-      const response = await RequestService.post(
-        'account',
-        '/api/Admin/Login',
-        {
-          email,
-          password,
-        },
-      );
+    const result = await LoginService.login(email, password, rememberMe);
 
-      if (response.status === 201) {
-        const { token, refreshToken } = response.data;
-
-        await TokenService.setTokens(token, refreshToken);
-
-        if (rememberMe) {
-          localStorage.setItem('adminEmail', email);
-        } else {
-          localStorage.removeItem('adminEmail');
-        }
-
-        window.location.href = '/admin-panel';
-      } else {
-        setError('Nieprawidłowe dane logowania. Spróbuj ponownie.');
-      }
-    } catch (err) {
-      setError('Błąd logowania. Sprawdź swoje dane i spróbuj ponownie.');
-    } finally {
-      setIsLoading(false);
+    if (result.success) {
+      window.location.href = '/admin-panel';
+    } else {
+      setError(result.message || 'An unknown error occurred.');
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -104,7 +83,6 @@ const Login = () => {
     >
       <div className="absolute inset-0 bg-background/50 backdrop-blur-sm" />
 
-      {/* <Card className="relative w-full max-w-md bg-background/80 backdrop-blur-sm"> */}
       <Card className="relative w-full max-w-md border border-white/20 bg-white/10 shadow-lg backdrop-blur-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-center text-2xl font-bold">
