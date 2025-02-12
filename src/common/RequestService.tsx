@@ -1,13 +1,19 @@
 import axios from 'axios';
-import { BOOK_SERVICE_URL, ACCOUNT_SERVICE_URL } from '../../config.json';
+import {
+  BOOK_SERVICE_URL,
+  ACCOUNT_SERVICE_URL,
+  REPORT_SERVICE_URL,
+} from '../../config.json';
 import TokenService from './TokenService';
 
-const getBaseUrl = (service: 'book' | 'account') => {
+const getBaseUrl = (service: 'book' | 'account' | 'report') => {
   switch (service) {
     case 'book':
       return BOOK_SERVICE_URL;
     case 'account':
       return ACCOUNT_SERVICE_URL;
+    case 'report':
+      return REPORT_SERVICE_URL;
     default:
       throw new Error(`Unknown service: ${service}`);
   }
@@ -50,17 +56,17 @@ instance.interceptors.response.use(
 );
 
 const RequestService = {
-  get: (service: 'book' | 'account', url: string, params = {}) => {
+  get: (service: 'book' | 'account' | 'report', url: string, params = {}) => {
     return instance.get(`${getBaseUrl(service)}${url}`, { params });
   },
-  post: (service: 'book' | 'account', url: string, data = {}) => {
+  post: (service: 'book' | 'account' | 'report', url: string, data = {}) => {
     console.log(`${getBaseUrl(service)}${url}`);
     return instance.post(`${getBaseUrl(service)}${url}`, data);
   },
-  put: (service: 'book' | 'account', url: string, data = {}) => {
+  put: (service: 'book' | 'account' | 'report', url: string, data = {}) => {
     return instance.put(`${getBaseUrl(service)}${url}`, data);
   },
-  delete: (service: 'book' | 'account', url: string) => {
+  delete: (service: 'book' | 'account' | 'report', url: string) => {
     return instance.delete(`${getBaseUrl(service)}${url}`);
   },
 };

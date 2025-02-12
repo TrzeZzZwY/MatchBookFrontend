@@ -1,5 +1,5 @@
 {
   "BOOK_SERVICE_URL": "http://localhost:8100",
   "ACCOUNT_SERVICE_URL": "http://localhost:8900",
-  "REPORTING_SERVICE_URL": "http://localhost:8200"
+  "REPORT_SERVICE_URL": "http://localhost:8200"
 }

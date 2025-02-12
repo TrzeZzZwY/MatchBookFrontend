@@ -6,7 +6,7 @@ import Dashboard from '@/components/Dashboard/Dashboard/Dashboard';
 import Users from '@/components/Dashboard/Users/Users';
 import Books from '@/components/Dashboard/Books/Books';
 import Authors from '@/components/Dashboard/Authors/Authors';
-import Reports from '@/components/Dashboard/Reports/Reports';
+import Reports from '@/components/Dashboard/Reports/CaseActionsPage';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
