@@ -111,22 +111,12 @@ export default function Books() {
     setPageNumber(1);
   };
 
-  const handlePreviousPage = () => {
-    if (pageNumber > 1) {
-      setPageNumber(pageNumber - 1);
-    }
-  };
-
   const handleBookAdded = () => {
     fetchBooks();
     toast({
       title: 'Sukces',
       description: 'Książka została dodana pomyślnie.',
     });
-  };
-
-  const handleNextPage = () => {
-    setPageNumber(pageNumber + 1);
   };
 
   const handleEditBook = (book: Book) => {
@@ -280,28 +270,46 @@ export default function Books() {
           </Table>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Zakres {(pageNumber - 1) * pageSize + 1}-{' '}
+          <p className="text-sm text-gray-500">
+            Zakres {(pageNumber - 1) * pageSize + 1}-
             {Math.min(pageNumber * pageSize, totalItems)} spośród {totalItems}{' '}
-            książek
+            użytkowników
           </p>
-          <div className="flex items-center space-x-2 text-foreground">
+          <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={handlePreviousPage}
+              onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
               disabled={pageNumber === 1}
             >
               <ChevronLeft className="h-4 w-4" />
-              Poprzednia strona
             </Button>
+            {[...Array(5)].map((_, index) => {
+              const pageNum = pageNumber - 2 + index;
+              if (pageNum > 0 && pageNum <= Math.ceil(totalItems / pageSize)) {
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={pageNum === pageNumber ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setPageNumber(pageNum)}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              }
+              return null;
+            })}
             <Button
               variant="outline"
               size="sm"
-              onClick={handleNextPage}
+              onClick={() =>
+                setPageNumber((prev) =>
+                  Math.min(prev + 1, Math.ceil(totalItems / pageSize)),
+                )
+              }
               disabled={pageNumber * pageSize >= totalItems}
             >
-              Następna strona
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

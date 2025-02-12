@@ -51,7 +51,7 @@ export default function Users() {
   const { toast } = useToast();
 
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(5);
   const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
@@ -116,11 +116,6 @@ export default function Users() {
       });
     }
   };
-
-  const handlePreviousPage = () =>
-    setPageNumber((prev) => Math.max(prev - 1, 1));
-  const handleNextPage = () =>
-    setPageNumber((prev) => (prev * pageSize < totalItems ? prev + 1 : prev));
 
   const renderStatusBadge = (status: 'ACTIVE' | 'BANED' | 'REMOVED') => {
     const statusConfig = {
@@ -190,10 +185,10 @@ export default function Users() {
             <SelectValue placeholder="Wybierz rozmiar strony" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="5">5 na stronę</SelectItem>
             <SelectItem value="10">10 na stronę</SelectItem>
             <SelectItem value="25">25 na stronę</SelectItem>
             <SelectItem value="50">50 na stronę</SelectItem>
-            <SelectItem value="100">100 na stronę</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -262,26 +257,45 @@ export default function Users() {
       </Table>
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
-          Showing {(pageNumber - 1) * pageSize + 1}-
-          {Math.min(pageNumber * pageSize, totalItems)} of {totalItems} items
+          Zakres {(pageNumber - 1) * pageSize + 1}-
+          {Math.min(pageNumber * pageSize, totalItems)} spośród {totalItems}{' '}
+          użytkowników
         </p>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={handlePreviousPage}
+            onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
             disabled={pageNumber === 1}
           >
             <ChevronLeft className="h-4 w-4" />
-            Poprzednia strona
           </Button>
+          {[...Array(5)].map((_, index) => {
+            const pageNum = pageNumber - 2 + index;
+            if (pageNum > 0 && pageNum <= Math.ceil(totalItems / pageSize)) {
+              return (
+                <Button
+                  key={pageNum}
+                  variant={pageNum === pageNumber ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setPageNumber(pageNum)}
+                >
+                  {pageNum}
+                </Button>
+              );
+            }
+            return null;
+          })}
           <Button
             variant="outline"
             size="sm"
-            onClick={handleNextPage}
+            onClick={() =>
+              setPageNumber((prev) =>
+                Math.min(prev + 1, Math.ceil(totalItems / pageSize)),
+              )
+            }
             disabled={pageNumber * pageSize >= totalItems}
           >
-            Następna strona
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

@@ -24,6 +24,7 @@ const sidebarItems = [
   { icon: FileText, label: 'Autorzy', id: 'authors' },
   { icon: Book, label: 'Książki', id: 'books' },
   { icon: Users, label: 'Użytkownicy', id: 'users' },
+  { icon: Users, label: 'Książki użytkowników', id: 'user-books' },
   { icon: AlertTriangle, label: 'Zgłoszenia', id: 'reports' },
 ];
 

@@ -10,6 +10,7 @@ import Reports from '@/components/Dashboard/Reports/Reports';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import UserBooks from '@/components/Dashboard/UserBookItems/UserBookItems';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -45,6 +46,8 @@ const AdminPanel = () => {
         return <Authors />;
       case 'reports':
         return <Reports />;
+      case 'user-books':
+        return <UserBooks />;
       default:
         return <div>Content for {activeTab}</div>;
     }

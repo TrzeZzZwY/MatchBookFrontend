@@ -63,7 +63,7 @@ export default function Authors() {
   const [searchTerm, setSearchTerm] = useState('');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
   const [editingAuthor, setEditingAuthor] = useState<Author | null>(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -106,16 +106,6 @@ export default function Authors() {
     const term = event.target.value;
     setSearchTerm(term);
     setPageNumber(1);
-  };
-
-  const handlePreviousPage = () => {
-    if (pageNumber > 1) {
-      setPageNumber(pageNumber - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    setPageNumber(pageNumber + 1);
   };
 
   const handleAuthorAdded = () => {
@@ -196,10 +186,10 @@ export default function Authors() {
               <SelectValue placeholder="Wybierz rozmiar strony" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="5">5 na stronę</SelectItem>
               <SelectItem value="10">10 na stronę</SelectItem>
               <SelectItem value="25">25 na stronę</SelectItem>
               <SelectItem value="50">50 na stronę</SelectItem>
-              <SelectItem value="100">100 na stronę</SelectItem>
             </SelectContent>
           </Select>
           <div className="flex items-center space-x-2 text-foreground">
@@ -296,28 +286,46 @@ export default function Authors() {
           </Table>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Zakres {(pageNumber - 1) * pageSize + 1} -{' '}
+          <p className="text-sm text-gray-500">
+            Zakres {(pageNumber - 1) * pageSize + 1}-
             {Math.min(pageNumber * pageSize, totalItems)} spośród {totalItems}{' '}
-            autorów
+            użytkowników
           </p>
-          <div className="flex items-center space-x-2 text-foreground">
+          <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={handlePreviousPage}
+              onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
               disabled={pageNumber === 1}
             >
               <ChevronLeft className="h-4 w-4" />
-              Poprzednia strona
             </Button>
+            {[...Array(5)].map((_, index) => {
+              const pageNum = pageNumber - 2 + index;
+              if (pageNum > 0 && pageNum <= Math.ceil(totalItems / pageSize)) {
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={pageNum === pageNumber ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setPageNumber(pageNum)}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              }
+              return null;
+            })}
             <Button
               variant="outline"
               size="sm"
-              onClick={handleNextPage}
+              onClick={() =>
+                setPageNumber((prev) =>
+                  Math.min(prev + 1, Math.ceil(totalItems / pageSize)),
+                )
+              }
               disabled={pageNumber * pageSize >= totalItems}
             >
-              Następna strona
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -335,17 +343,9 @@ export default function Authors() {
         isOpen={deleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
         onConfirm={confirmDeleteAuthor}
-        title="Potwierdzenie usunięcia"
-        description={`Czy na pewno chcesz usunąć autora ${
-          authorToDelete
-            ? `${authors.find((a) => a.id === authorToDelete)?.firstName} ${
-                authors.find((a) => a.id === authorToDelete)?.lastName
-              }`
-            : ''
-        }?`}
-        confirmLabel="Usuń"
-        cancelLabel="Anuluj"
         isProcessing={isDeleting}
+        title="Czy na pewno chcesz usunąć tę książkę?"
+        description="Ta akcja jest nieodwracalna."
       />
       <Toaster />
     </ScrollArea>
