@@ -99,7 +99,6 @@ export function EditBookDialog({
         });
 
         fetchBooks();
-
         onClose();
       } catch (error) {
         console.error('Failed to update book:', error);
@@ -116,10 +115,10 @@ export function EditBookDialog({
 
   return (
     <Dialog open={!!book} onOpenChange={onClose}>
-      <DialogContent className="text-black sm:max-w-[425px]">
+      <DialogContent className="bg-background text-foreground sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-black">Edycja Książki</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-foreground">Edycja Książki</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             Dokonaj zmian, a następnie kliknij przycisk Zapisz zmiany.
           </DialogDescription>
         </DialogHeader>
@@ -130,10 +129,10 @@ export function EditBookDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-black">Tytuł</FormLabel>
+                  <FormLabel className="text-foreground">Tytuł</FormLabel>
                   <FormControl>
                     <Input
-                      className="text-black"
+                      className="bg-card text-foreground"
                       placeholder="Wpisz tytuł książki"
                       {...field}
                     />
@@ -147,12 +146,12 @@ export function EditBookDialog({
               name="authorsIds"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-black">
+                  <FormLabel className="text-foreground">
                     Autor/Autorzy (IDs)
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="text-black"
+                      className="bg-card text-foreground"
                       placeholder="Wpisz identyfikatory autorów oddzielone przecinkami lub spacjami"
                       {...field}
                       onChange={(e) => {

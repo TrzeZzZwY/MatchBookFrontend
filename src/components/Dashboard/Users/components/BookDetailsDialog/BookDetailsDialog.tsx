@@ -1,4 +1,3 @@
-// src/components/BookDetailsDialog.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -27,13 +26,11 @@ export default function BookDetailsDialog({
   onClose,
   books,
 }: BookDetailsDialogProps) {
-  // Local state so we can update the list after an operation.
   const [bookList, setBookList] = useState<UserBookItem[]>(books);
   useEffect(() => {
     setBookList(books);
   }, [books]);
 
-  // State for the CRUD dialogs:
   const [deleteConfirmItem, setDeleteConfirmItem] =
     useState<UserBookItem | null>(null);
   const [statusChangeItem, setStatusChangeItem] = useState<UserBookItem | null>(
@@ -42,10 +39,12 @@ export default function BookDetailsDialog({
 
   const handleDeleteConfirm = () => {
     if (!deleteConfirmItem) return;
-    UserBooksService.deleteUserBookItem(deleteConfirmItem.id)
+    UserBooksService.changeUserBookItemStatus(deleteConfirmItem.id, 'Removed')
       .then(() => {
         setBookList((prev) =>
-          prev.filter((b) => b.id !== deleteConfirmItem.id),
+          prev.map((b) =>
+            b.id === deleteConfirmItem.id ? { ...b, status: 'Removed' } : b,
+          ),
         );
         setDeleteConfirmItem(null);
       })
@@ -64,6 +63,16 @@ export default function BookDetailsDialog({
         setStatusChangeItem(null);
       })
       .catch((err) => alert(err.message));
+  };
+
+  const statusColors: { [key: string]: string } = {
+    ActivePublic:
+      'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100',
+    ActivePrivate:
+      'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100',
+    Disabled:
+      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100',
+    Removed: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100',
   };
 
   return (
@@ -106,7 +115,12 @@ export default function BookDetailsDialog({
                     <h3 className="text-xl font-semibold leading-none tracking-tight">
                       {book.bookReference.title}
                     </h3>
-                    <div className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">
+                    <div
+                      className={`inline-flex items-center rounded-full px-3 py-1 text-sm ${
+                        statusColors[book.status] ||
+                        'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100'
+                      }`}
+                    >
                       {book.status}
                     </div>
                     {book.description && (
@@ -127,22 +141,24 @@ export default function BookDetailsDialog({
                         ))}
                       </ul>
                     </div>
-                    <div className="flex space-x-2 pt-2">
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => setDeleteConfirmItem(book)}
-                      >
-                        Usuń
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setStatusChangeItem(book)}
-                      >
-                        Zmień status
-                      </Button>
-                    </div>
+                    {book.status !== 'Removed' && (
+                      <div className="flex space-x-2 pt-2">
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setDeleteConfirmItem(book)}
+                        >
+                          Usuń
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setStatusChangeItem(book)}
+                        >
+                          Zmień status
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -154,20 +170,18 @@ export default function BookDetailsDialog({
         </div>
       </DialogContent>
 
-      {/* Delete Confirmation Dialog */}
       {deleteConfirmItem && (
         <ConfirmationDialog
           isOpen={!!deleteConfirmItem}
           onClose={() => setDeleteConfirmItem(null)}
           onConfirm={handleDeleteConfirm}
-          title="Potwierdzenie usunięcia"
-          description={`Czy na pewno chcesz usunąć użytkownikowi książkę "${deleteConfirmItem.bookReference.title}"?`}
-          confirmLabel="Usuń"
+          title="Potwierdzenie zmiany statusu"
+          description={`Czy na pewno chcesz ustawić status książki "${deleteConfirmItem.bookReference.title}" na "Removed"?`}
+          confirmLabel="Ustaw jako Removed"
           cancelLabel="Anuluj"
         />
       )}
 
-      {/* Change Status Dialog */}
       {statusChangeItem && (
         <ChangeStatusDialog
           isOpen={!!statusChangeItem}

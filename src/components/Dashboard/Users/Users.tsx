@@ -37,6 +37,8 @@ import {
 import UserService, { type User } from './services/UsersService';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import UserBooksCell from './components/UserBooksCell/UserBooksCell';
+import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function Users() {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -46,10 +48,10 @@ export default function Users() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const { toast } = useToast();
 
-  // Pagination states
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(50);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function Users() {
     fetchUsers
       .then((data) => {
         setUsers(data.items);
-        setTotalItems(data.itemsCount);
+        setTotalItems(data.totalItemsCount);
       })
       .catch(() => setError('Nie udało się załadować listy użytkowników.'));
 
@@ -83,8 +85,18 @@ export default function Users() {
             user.id === userId ? { ...user, status } : user,
           ),
         );
+        toast({
+          title: 'Sukces',
+          description: `Status użytkownika został zmieniony na ${status}.`,
+        });
       })
-      .catch(() => alert('Błąd przy zmianie statusu.'))
+      .catch(() => {
+        toast({
+          title: 'Błąd',
+          description: 'Błąd przy zmianie statusu.',
+          variant: 'destructive',
+        });
+      })
       .finally(() => setIsProcessing(false));
   };
 
@@ -98,6 +110,10 @@ export default function Users() {
       handleChangeStatus(selectedUser.id, 'REMOVED');
       setConfirmDialogOpen(false);
       setSelectedUser(null);
+      toast({
+        title: 'Sukces',
+        description: 'Użytkownik został usunięty.',
+      });
     }
   };
 
@@ -242,6 +258,7 @@ export default function Users() {
             </TableRow>
           ))}
         </TableBody>
+        <Toaster />
       </Table>
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">

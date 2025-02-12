@@ -86,10 +86,10 @@ export function EditAuthorDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="text-black sm:max-w-[425px]">
+      <DialogContent className="bg-background text-foreground sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-black">Edytuj autora</DialogTitle>
-          <DialogDescription className="text-gray-600">
+          <DialogTitle className="text-foreground">Edytuj autora</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             Zaktualizuj dane autora tutaj. Kliknij zapisz, gdy skończysz.
           </DialogDescription>
         </DialogHeader>
@@ -100,9 +100,9 @@ export function EditAuthorDialog({
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">Imię</FormLabel>
+                  <FormLabel className="text-foreground">Imię</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-black" />
+                    <Input {...field} className="bg-card text-foreground" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -113,11 +113,9 @@ export function EditAuthorDialog({
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">
-                    Nazwisko
-                  </FormLabel>
+                  <FormLabel className="text-foreground">Nazwisko</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-black" />
+                    <Input {...field} className="bg-card text-foreground" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -128,9 +126,9 @@ export function EditAuthorDialog({
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">Kraj</FormLabel>
+                  <FormLabel className="text-foreground">Kraj</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-black" />
+                    <Input {...field} className="bg-card text-foreground" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -141,7 +139,7 @@ export function EditAuthorDialog({
               name="yearOfBirth"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">
+                  <FormLabel className="text-foreground">
                     Rok urodzenia
                   </FormLabel>
                   <FormControl>
@@ -149,7 +147,7 @@ export function EditAuthorDialog({
                       {...field}
                       type="number"
                       onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                      className="text-black"
+                      className="bg-card text-foreground"
                     />
                   </FormControl>
                   <FormMessage />

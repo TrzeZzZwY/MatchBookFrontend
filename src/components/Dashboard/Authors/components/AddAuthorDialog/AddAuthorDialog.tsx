@@ -94,10 +94,12 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
           <Plus className="mr-2 h-4 w-4" /> Dodaj autora
         </Button>
       </DialogTrigger>
-      <DialogContent className="text-black sm:max-w-[425px]">
+      <DialogContent className="bg-background text-foreground sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-black">Dodaj nowego autora</DialogTitle>
-          <DialogDescription className="text-gray-600">
+          <DialogTitle className="text-foreground">
+            Dodaj nowego autora
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             Wprowadź dane nowego autora tutaj. Kliknij zapisz, gdy skończysz.
           </DialogDescription>
         </DialogHeader>
@@ -108,9 +110,12 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">Imię</FormLabel>
+                  <FormLabel className="text-foreground">Imię</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-black" />
+                    <Input
+                      {...field}
+                      className="border-border bg-background text-foreground focus:border-ring focus:ring-ring"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -121,11 +126,12 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">
-                    Nazwisko
-                  </FormLabel>
+                  <FormLabel className="text-foreground">Nazwisko</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-black" />
+                    <Input
+                      {...field}
+                      className="border-border bg-background text-foreground focus:border-ring focus:ring-ring"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -136,9 +142,12 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">Kraj</FormLabel>
+                  <FormLabel className="text-foreground">Kraj</FormLabel>
                   <FormControl>
-                    <Input {...field} className="text-black" />
+                    <Input
+                      {...field}
+                      className="border-border bg-background text-foreground focus:border-ring focus:ring-ring"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -149,7 +158,7 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
               name="yearOfBirth"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-right text-black">
+                  <FormLabel className="text-foreground">
                     Rok urodzenia
                   </FormLabel>
                   <FormControl>
@@ -157,7 +166,7 @@ export function AddAuthorDialog({ onAuthorAdded }: AddAuthorDialogProps) {
                       {...field}
                       type="number"
                       onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                      className="text-black"
+                      className="border-border bg-background text-foreground focus:border-ring focus:ring-ring"
                     />
                   </FormControl>
                   <FormMessage />

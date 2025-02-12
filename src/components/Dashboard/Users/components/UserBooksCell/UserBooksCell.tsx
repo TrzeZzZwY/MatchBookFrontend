@@ -1,4 +1,3 @@
-// src/components/UserBooksCell.tsx
 'use client';
 
 import { useEffect, useState } from 'react';

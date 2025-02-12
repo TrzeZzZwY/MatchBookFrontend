@@ -101,10 +101,12 @@ export function AddBookDialog({ onBookAdded }: AddBookDialogProps) {
           <Plus className="mr-2 h-4 w-4" /> Dodaj książkę
         </Button>
       </DialogTrigger>
-      <DialogContent className="text-black sm:max-w-[425px]">
+      <DialogContent className="bg-background text-foreground sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-black">Dodaj nową książkę</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-foreground">
+            Dodaj nową książkę
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground">
             Wprowadź dane nowej książki, a następnie kliknij przycisk Zapisz
           </DialogDescription>
         </DialogHeader>
@@ -115,10 +117,10 @@ export function AddBookDialog({ onBookAdded }: AddBookDialogProps) {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-black">Tytuł</FormLabel>
+                  <FormLabel className="text-foreground">Tytuł</FormLabel>
                   <FormControl>
                     <Input
-                      className="text-black"
+                      className="border-border bg-background text-foreground focus:border-ring focus:ring-ring"
                       placeholder="Wpisz tytuł książki"
                       {...field}
                     />
@@ -132,12 +134,12 @@ export function AddBookDialog({ onBookAdded }: AddBookDialogProps) {
               name="authorsIds"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-black">
+                  <FormLabel className="text-foreground">
                     Autor/Autorzy (IDs)
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="text-black"
+                      className="border-border bg-background text-foreground focus:border-ring focus:ring-ring"
                       placeholder="Wpisz ID autorów oddzielone przecinkami lub spacjami"
                       {...field}
                       onChange={(e) => field.onChange(e.target.value)}

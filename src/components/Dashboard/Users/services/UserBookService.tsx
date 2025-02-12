@@ -1,4 +1,3 @@
-// src/services/UserBookService.ts
 import RequestService from '@/common/RequestService';
 import CancelablePromise from '@/common/CancelablePromise';
 
@@ -36,7 +35,6 @@ export interface UserBooksResponse {
 }
 
 const UserBooksService = {
-  // Basic GET: Loads the user book items.
   getUserBooks(
     userId: number,
     {
@@ -47,7 +45,7 @@ const UserBooksService = {
     } = {},
   ) {
     const promise = RequestService.get(
-      'book', // Make sure this key is correctly mapped to port 8100 in your RequestService configuration.
+      'book',
       `/api/UserBookItem?includeBookAuthors=true&userId=${userId}`,
       {
         pageSize,
@@ -65,7 +63,6 @@ const UserBooksService = {
     return CancelablePromise(promise);
   },
 
-  // DELETE: Removes a user book item.
   deleteUserBookItem(userBookItemId: number) {
     const promise = RequestService.delete(
       'book',
@@ -79,7 +76,6 @@ const UserBooksService = {
     return CancelablePromise(promise);
   },
 
-  // PUT: Edits all fields of a user book item.
   editUserBookItem(
     userBookItemId: number,
     data: {
@@ -103,7 +99,6 @@ const UserBooksService = {
     return CancelablePromise(promise);
   },
 
-  // PUT: Changes only the status of a user book item.
   changeUserBookItemStatus(userBookItemId: number, status: string) {
     const promise = RequestService.put(
       'book',
