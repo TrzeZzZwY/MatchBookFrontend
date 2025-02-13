@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { ACCOUNT_SERVICE_URL } from '../../config.json';
 class TokenService {
   private static ACCESS_TOKEN_KEY = 'access_token';
   private static REFRESH_TOKEN_KEY = 'refresh_token';
@@ -29,7 +29,7 @@ class TokenService {
       if (!refreshToken) throw new Error('No refresh token available');
 
       const response = await axios.post(
-        'http://localhost:8900/api/Auth/refresh',
+        `${ACCOUNT_SERVICE_URL}/api/Auth/refresh`,
         { refreshToken },
         {
           headers: {
