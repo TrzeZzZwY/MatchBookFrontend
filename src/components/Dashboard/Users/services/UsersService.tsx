@@ -29,6 +29,20 @@ const UserService = {
     return CancelablePromise(promise);
   },
 
+  getUser(userId: number) {
+    const promise = RequestService.get('account', `/api/User/${userId}`).then(
+      (response) => {
+        if (response.status === 200) {
+          return response.data as User;
+        } else {
+          throw new Error('Błąd podczas pobierania użytkownika.');
+        }
+      },
+    );
+
+    return CancelablePromise(promise);
+  },
+
   updateStatus(userId: number, status: 'ACTIVE' | 'REMOVED' | 'BANED') {
     const promise = RequestService.post('account', `/account-status`, {
       userId,

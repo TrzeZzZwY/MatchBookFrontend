@@ -14,6 +14,8 @@ import { useToast } from '@/hooks/use-toast';
 import CaseActionService, {
   type CaseActionDetail,
 } from '../../services/CaseActionService';
+import { AlertCircle, CheckCircle, XCircle } from 'lucide-react';
+import type React from 'react';
 
 interface CaseActionDetailDialogProps {
   caseId: number | null;
@@ -49,7 +51,7 @@ export function CaseActionDetailDialog({
           setError(null);
         })
         .catch((err) => {
-          setError('Failed to load case details.');
+          setError('Nie udało się załadować szczegółów sprawy.');
           console.error(err);
         });
     }
@@ -60,15 +62,18 @@ export function CaseActionDetailDialog({
     setIsAssigning(true);
     try {
       await CaseActionService.assignCase(caseId);
-      toast({ title: 'Success', description: 'Case assigned successfully.' });
+      toast({
+        title: 'Sukces',
+        description: 'Sprawa została przypisana pomyślnie.',
+      });
       fetchCaseDetail();
       onCaseUpdated();
     } catch (error) {
-      console.error('Failed to assign case:', error);
+      console.error('Nie udało się przypisać sprawy:', error);
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to assign case.',
+        title: 'Błąd',
+        description: 'Nie udało się przypisać sprawy.',
       });
     } finally {
       setIsAssigning(false);
@@ -80,15 +85,18 @@ export function CaseActionDetailDialog({
     setIsApproving(true);
     try {
       await CaseActionService.approveCase(caseId);
-      toast({ title: 'Success', description: 'Case approved successfully.' });
+      toast({
+        title: 'Sukces',
+        description: 'Sprawa została zatwierdzona pomyślnie.',
+      });
       fetchCaseDetail();
       onCaseUpdated();
     } catch (error) {
-      console.error('Failed to approve case:', error);
+      console.error('Nie udało się zatwierdzić sprawy:', error);
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to approve case.',
+        title: 'Błąd',
+        description: 'Nie udało się zatwierdzić sprawy.',
       });
     } finally {
       setIsApproving(false);
@@ -100,15 +108,18 @@ export function CaseActionDetailDialog({
     setIsRejecting(true);
     try {
       await CaseActionService.rejectCase(caseId);
-      toast({ title: 'Success', description: 'Case rejected successfully.' });
+      toast({
+        title: 'Sukces',
+        description: 'Sprawa została odrzucona pomyślnie.',
+      });
       fetchCaseDetail();
       onCaseUpdated();
     } catch (error) {
-      console.error('Failed to reject case:', error);
+      console.error('Nie udało się odrzucić sprawy:', error);
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to reject case.',
+        title: 'Błąd',
+        description: 'Nie udało się odrzucić sprawy.',
       });
     } finally {
       setIsRejecting(false);
@@ -127,9 +138,9 @@ export function CaseActionDetailDialog({
         <Button
           onClick={handleAssign}
           disabled={isAssigning}
-          className="w-full bg-purple-600 hover:bg-purple-700"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
         >
-          {isAssigning ? 'Assigning...' : 'Assign to Me'}
+          {isAssigning ? 'Przypisywanie...' : 'Przypisz do mnie'}
         </Button>
       );
     }
@@ -140,9 +151,10 @@ export function CaseActionDetailDialog({
           <Button
             onClick={handleApprove}
             disabled={isApproving}
-            className="flex-1 bg-purple-600 hover:bg-purple-700"
+            variant="secondary"
+            className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
           >
-            {isApproving ? 'Approving...' : 'Approve'}
+            {isApproving ? 'Zatwierdzanie...' : 'Zatwierdź'}
           </Button>
           <Button
             onClick={handleReject}
@@ -150,7 +162,7 @@ export function CaseActionDetailDialog({
             variant="destructive"
             className="flex-1"
           >
-            {isRejecting ? 'Rejecting...' : 'Reject'}
+            {isRejecting ? 'Odrzucanie...' : 'Odrzuć'}
           </Button>
         </div>
       );
@@ -162,56 +174,89 @@ export function CaseActionDetailDialog({
   const DetailRow = ({
     label,
     value,
+    icon,
   }: {
     label: string;
     value: string | number;
+    icon?: React.ReactNode;
   }) => (
     <div className="flex items-center justify-between py-2">
-      <span className="text-sm font-medium text-gray-400">{label}</span>
-      <span className="font-medium text-white">{value}</span>
+      <span className="text-sm text-muted-foreground">{label}</span>
+      <div className="flex items-center gap-2">
+        {icon}
+        <span className="text-foreground">{value}</span>
+      </div>
     </div>
   );
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'APPROVED':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'REJECTED':
+        return <XCircle className="h-4 w-4 text-red-500" />;
+      case 'INREVIEW':
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md border-gray-800 bg-[#0A0A0B] text-white">
-        <DialogHeader className="space-y-1">
-          <DialogTitle>Case Action Details</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Detailed information about the selected case action.
+      <DialogContent className="flex h-[calc(100vh-2rem)] max-h-[calc(100vh-2rem)] flex-col bg-background text-foreground sm:h-auto sm:max-w-[500px]">
+        <DialogHeader className="flex-none">
+          <DialogTitle>Szczegóły akcji sprawy</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
+            Szczegółowe informacje o wybranej akcji sprawy.
           </DialogDescription>
         </DialogHeader>
         {error ? (
-          <p className="text-red-500">{error}</p>
+          <p className="text-destructive">{error}</p>
         ) : caseDetail ? (
-          <div className="space-y-1 py-2">
-            <DetailRow label="Case ID" value={caseDetail.caseId} />
-            <DetailRow label="User ID" value={caseDetail.userId} />
-            <DetailRow label="Status" value={caseDetail.caseStatus} />
-            <DetailRow label="Type" value={caseDetail.caseType} />
-            <DetailRow label="Report Type" value={caseDetail.reportType} />
-            <DetailRow label="Report Note" value={caseDetail.reportNote} />
-            <DetailRow
-              label="Reviewer ID"
-              value={caseDetail.reviewerId || 'N/A'}
-            />
-            <DetailRow label="Item ID" value={caseDetail.itemId || 'N/A'} />
+          <div className="flex-1 space-y-4 overflow-y-auto pr-2">
+            <div className="space-y-2">
+              <DetailRow label="ID sprawy" value={caseDetail.caseId} />
+              <DetailRow label="ID użytkownika" value={caseDetail.userId} />
+              <DetailRow
+                label="Status"
+                value={caseDetail.caseStatus}
+                icon={getStatusIcon(caseDetail.caseStatus)}
+              />
+              <DetailRow label="Typ" value={caseDetail.caseType} />
+              <DetailRow label="Typ raportu" value={caseDetail.reportType} />
+            </div>
 
-            {Object.entries(caseDetail.keyValues).map(([key, value]) => (
-              <DetailRow key={key} label={key} value={value} />
-            ))}
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-purple-500">
+                Szczegóły raportu
+              </h3>
+              <DetailRow label="Notatka" value={caseDetail.reportNote} />
+              <DetailRow
+                label="ID przypisanego admina"
+                value={caseDetail.reviewerId || '-'}
+              />
+              <DetailRow label="Item ID" value={caseDetail.itemId || '-'} />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="flex items-center gap-2 text-sm font-medium text-purple-500">
+                Kluczowe wartości
+              </h3>
+              {Object.entries(caseDetail.keyValues).map(([key, value]) => (
+                <DetailRow key={key} label={key} value={value} />
+              ))}
+            </div>
           </div>
         ) : (
-          <div className="py-8 text-center text-gray-400">Loading...</div>
+          <div className="py-4 text-center text-muted-foreground">
+            Ładowanie...
+          </div>
         )}
-        <DialogFooter className="flex-col gap-2 sm:flex-col">
+        <DialogFooter className="mt-4 gap-4">
           {renderActionButtons()}
-          <Button
-            onClick={onClose}
-            variant="outline"
-            className="w-full border-gray-800"
-          >
-            Close
+          <Button onClick={onClose} variant="outline" className="w-full">
+            Zamknij
           </Button>
         </DialogFooter>
       </DialogContent>

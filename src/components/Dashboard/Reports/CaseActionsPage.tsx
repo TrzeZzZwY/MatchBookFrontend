@@ -25,6 +25,7 @@ import CaseActionService, {
 import { CaseActionDetailDialog } from './components/CaseActionDetailDialog/CaseActionDetailDialog';
 import { Toaster } from '@/components/ui/toaster';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import UserService from '@/components/Dashboard/Users/services/UsersService';
 
 export default function CaseActionsPage() {
   const [caseActions, setCaseActions] = useState<CaseAction[]>([]);
@@ -38,6 +39,7 @@ export default function CaseActionsPage() {
     caseStatus: '',
     caseType: '',
   });
+  const [userEmails, setUserEmails] = useState<Record<number, string>>({});
 
   const fetchCaseActions = useCallback(() => {
     const fetchPromise = CaseActionService.getCaseActions({
@@ -45,14 +47,12 @@ export default function CaseActionsPage() {
       pageNumber,
       ...filters,
     });
-
     fetchPromise
       .then((data) => {
         setCaseActions(data.items);
         setTotalItems(data.totalItemsCount);
       })
-      .catch(() => setError('Failed to load case actions.'));
-
+      .catch(() => setError('Nie udało się załadować reportów.'));
     return fetchPromise;
   }, [pageSize, pageNumber, filters]);
 
@@ -60,9 +60,34 @@ export default function CaseActionsPage() {
     const debounceTimer = setTimeout(() => {
       fetchCaseActions();
     }, 300);
-
     return () => clearTimeout(debounceTimer);
   }, [fetchCaseActions]);
+
+  useEffect(() => {
+    const uniqueUserIds = Array.from(
+      new Set(caseActions.map((ca) => ca.userId)),
+    );
+    const missingUserIds = uniqueUserIds.filter(
+      (userId) => !userEmails[userId],
+    );
+    if (missingUserIds.length > 0) {
+      Promise.all(
+        missingUserIds.map((userId) =>
+          UserService.getUser(userId)
+            .then((user) => ({ userId, email: user.email }))
+            .catch(() => ({ userId, email: 'N/D' })),
+        ),
+      ).then((results) => {
+        setUserEmails((prev) => {
+          const newEmails = { ...prev };
+          results.forEach(({ userId, email }) => {
+            newEmails[userId] = email;
+          });
+          return newEmails;
+        });
+      });
+    }
+  }, [caseActions, userEmails]);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -80,16 +105,30 @@ export default function CaseActionsPage() {
     <ScrollArea className="h-full bg-background text-foreground">
       <div className="space-y-6 p-4 md:p-6">
         <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-          Case Actions
+          Raporty i zgłoszenia
         </h1>
-
         <div className="flex items-center space-x-4">
+          <Select
+            value={filters.caseStatus}
+            onValueChange={(value) => handleFilterChange('caseStatus', value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Wybierz status sprawy" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="OPEN">OPEN</SelectItem>
+              <SelectItem value="REJECTED">REJECTED</SelectItem>
+              <SelectItem value="INREVIEW">INREVIEW</SelectItem>
+              <SelectItem value="APPROVED">APPROVED</SelectItem>
+            </SelectContent>
+          </Select>
+
           <Select
             value={filters.caseType}
             onValueChange={(value) => handleFilterChange('caseType', value)}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select case type" />
+              <SelectValue placeholder="Wybierz typ sprawy" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="AUTHOR">Author</SelectItem>
@@ -107,13 +146,13 @@ export default function CaseActionsPage() {
             }}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Items per page" />
+              <SelectValue placeholder="Elementów na stronę" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="5">5 per page</SelectItem>
-              <SelectItem value="10">10 per page</SelectItem>
-              <SelectItem value="25">25 per page</SelectItem>
-              <SelectItem value="50">50 per page</SelectItem>
+              <SelectItem value="5">5 na stronę</SelectItem>
+              <SelectItem value="10">10 na stronę</SelectItem>
+              <SelectItem value="25">25 na stronę</SelectItem>
+              <SelectItem value="50">50 na stronę</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -122,13 +161,14 @@ export default function CaseActionsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Case ID</TableHead>
-                <TableHead>User ID</TableHead>
+                <TableHead>ID sprawy</TableHead>
+                <TableHead>ID użytkownika</TableHead>
+                <TableHead>Email użytkownika</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Report Type</TableHead>
-                <TableHead>Reviewer ID</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Typ</TableHead>
+                <TableHead>Rodzaj zgłoszenia</TableHead>
+                <TableHead>ID przypisanego admina</TableHead>
+                <TableHead className="text-right">Akcje</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -137,18 +177,21 @@ export default function CaseActionsPage() {
                   <TableCell>{caseAction.caseId}</TableCell>
                   <TableCell>{caseAction.userId}</TableCell>
                   <TableCell>
+                    {userEmails[caseAction.userId] || 'Ładowanie...'}
+                  </TableCell>
+                  <TableCell>
                     <Badge>{caseAction.caseStatus}</Badge>
                   </TableCell>
                   <TableCell>{caseAction.caseType}</TableCell>
                   <TableCell>{caseAction.reportType}</TableCell>
-                  <TableCell>{caseAction.reviewerId || 'N/A'}</TableCell>
+                  <TableCell>{caseAction.reviewerId || '-'}</TableCell>
                   <TableCell className="text-right">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handleCaseClick(caseAction.caseId)}
                     >
-                      View Details
+                      Pokaż szczegóły
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -156,12 +199,11 @@ export default function CaseActionsPage() {
             </TableBody>
           </Table>
         </div>
-
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-500">
-            Showing {(pageNumber - 1) * pageSize + 1}-
-            {Math.min(pageNumber * pageSize, totalItems)} of {totalItems} case
-            actions
+            Zakres {(pageNumber - 1) * pageSize + 1}-
+            {Math.min(pageNumber * pageSize, totalItems)} spośród {totalItems}{' '}
+            wyników
           </p>
           <div className="flex items-center space-x-2">
             <Button
@@ -203,14 +245,12 @@ export default function CaseActionsPage() {
           </div>
         </div>
       </div>
-
       <CaseActionDetailDialog
         caseId={selectedCaseId}
         isOpen={isDetailDialogOpen}
         onClose={() => setIsDetailDialogOpen(false)}
         onCaseUpdated={fetchCaseActions}
       />
-
       <Toaster />
     </ScrollArea>
   );
