@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/Dashboard/Sidebar/Sidebar';
-import Dashboard from '@/components/Dashboard/Dashboard/Dashboard';
+import Statistics from '@/components/Dashboard/Statistics/Statistics';
 import Users from '@/components/Dashboard/Users/Users';
 import Books from '@/components/Dashboard/Books/Books';
 import Authors from '@/components/Dashboard/Authors/Authors';
@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import UserBooks from '@/components/Dashboard/UserBookItems/UserBookItems';
 
 const AdminPanel = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('statistics');
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -36,8 +36,8 @@ const AdminPanel = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'dashboard':
-        return <Dashboard />;
+      case 'statistics':
+        return <Statistics />;
       case 'users':
         return <Users />;
       case 'books':

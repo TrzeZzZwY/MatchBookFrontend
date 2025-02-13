@@ -56,8 +56,8 @@ const UserBookItemsService = {
     region = undefined,
     userId = undefined,
     title = '',
-    startDate = undefined,
-    endDate = undefined,
+    startDate = '',
+    endDate = '',
   } = {}) {
     const promise = RequestService.get('book', '/api/UserBookItem', {
       pageSize,

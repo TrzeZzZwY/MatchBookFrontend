@@ -20,7 +20,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const sidebarItems = [
-  { icon: Home, label: 'Panel', id: 'dashboard' },
+  { icon: Home, label: 'Statystyki', id: 'statistics' },
   { icon: FileText, label: 'Autorzy', id: 'authors' },
   { icon: Book, label: 'Książki', id: 'books' },
   { icon: Users, label: 'Użytkownicy', id: 'users' },

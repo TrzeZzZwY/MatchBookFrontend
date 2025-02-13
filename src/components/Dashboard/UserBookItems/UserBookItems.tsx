@@ -24,7 +24,7 @@ import {
 import UserBookItemsService, {
   type UserBookItem,
   type User,
-} from './service/UserBookItemsService';
+} from './services/UserBookItemsService';
 import { Toaster } from '@/components/ui/toaster';
 
 export default function UserBookItemsPage() {
