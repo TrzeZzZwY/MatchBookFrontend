@@ -118,14 +118,4 @@ Aby uruchomić aplikację, wymagane są:
 - Nieudane pobranie danych użytkownika zwraca wartość "N/D".
 - Brak przypisanego administratora oznaczony jest znakiem "-".
 
-## Podsumowanie
-Panel administracyjny aplikacji Matchbook umożliwia efektywne zarządzanie użytkownikami, książkami i zgłoszeniami. Dzięki paginacji, filtrom i powiadomieniom administratorzy mogą sprawnie obsługiwać dane i podejmować decyzje. 
-
-Dokumentacja przedstawia najważniejsze moduły i funkcjonalności systemu, zapewniając kompleksowy przegląd możliwości panelu administracyjnego.
-
 A starter [Vite](https://vitejs.dev/) template by [RoyRao2333](https://github.com/RoyRao2333/template-vite-react-ts-tailwind) has:
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- Multiple eslint & prettier plugins installed
