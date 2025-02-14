@@ -118,4 +118,4 @@ Aby uruchomić aplikację, wymagane są:
 - Nieudane pobranie danych użytkownika zwraca wartość "N/D".
 - Brak przypisanego administratora oznaczony jest znakiem "-".
 
-A starter [Vite](https://vitejs.dev/) template by [RoyRao2333](https://github.com/RoyRao2333/template-vite-react-ts-tailwind) has:
+A starter [Vite](https://vitejs.dev/) template by [RoyRao2333](https://github.com/RoyRao2333/template-vite-react-ts-tailwind).
