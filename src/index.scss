@@ -2,24 +2,319 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 263.4 70% 50.4%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 70% 50.4%;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 72px;
+@layer base {
+  * {
+    @apply border-border;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-body {
-  font-family: 'Montserrat', sans-serif;
-  color: #fff;
-  height: 100vh;
-  @apply bg-sunflower-50 dark:bg-gray-900;
+@layer components {
+  .skewed-top {
+    position: relative;
+    padding-top: 6rem;
+  }
+
+  .skewed-top::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6rem;
+    background: inherit;
+    transform: skewY(-2deg);
+    transform-origin: 0;
+  }
+
+  .skewed-bottom {
+    position: relative;
+    padding-bottom: 6rem;
+  }
+
+  .skewed-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6rem;
+    background: inherit;
+    transform: skewY(-2deg);
+    transform-origin: 100%;
+  }
 }
 
-::selection{
-  @apply bg-sunflower-400 dark:bg-sunflower-700;
+.hero-gradient {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)),
+    url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/book_small-4Vu2gAH0OdzLP1iMOiOtp8A1ilUaI6.png');
+  background-size: cover;
+  background-position: center;
 }
+
+.app-showcase {
+  background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes page-turn {
+  0%,
+  100% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: rotateY(-180deg);
+    opacity: 0.5;
+  }
+}
+
+.animate-page-turn {
+  animation: page-turn 3s ease-in-out infinite;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+.kenburns-top {
+  animation: kenburns-top 10s linear infinite alternate both;
+}
+
+@keyframes kenburns-top {
+  0% {
+    transform: scale(1) translateY(0);
+    transform-origin: 50% 16%;
+  }
+  100% {
+    transform: scale(1.25) translateY(-15px);
+    transform-origin: top;
+  }
+}
+.bounce-top {
+  display: block;
+  animation: bounce-top 1.9s infinite both;
+}
+
+@keyframes bounce-top {
+  0% {
+    transform: translate(-50%, -45px);
+    animation-timing-function: ease-in;
+    opacity: 1;
+  }
+  24% {
+    opacity: 1;
+  }
+  40% {
+    transform: translate(-50%, -24px);
+    animation-timing-function: ease-in;
+  }
+  65% {
+    transform: translate(-50%, -12px);
+    animation-timing-function: ease-in;
+  }
+  25%,
+  55%,
+  75%,
+  87% {
+    transform: translate(-50%, 0px);
+    animation-timing-function: ease-out;
+  }
+  100% {
+    transform: translate(-50%, 0px);
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+}
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes kenburns-top {
+  0% {
+    transform: scale(1) translateY(0);
+    transform-origin: 50% 16%;
+  }
+  100% {
+    transform: scale(1.25) translateY(-15px);
+    transform-origin: top;
+  }
+}
+
+.kenburns-top {
+  animation: kenburns-top 20s ease-out both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fadeInLeft {
+  animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.animate-fadeInRight {
+  animation: fadeInRight 0.6s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animate-delay-500 {
+  animation-delay: 500ms;
+}
+

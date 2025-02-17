@@ -9,7 +9,7 @@
   bracketSpacing: true,
   arrowParens: 'always',
   jsxBracketSameLine: false,
-  endOfLine: 'lf',
+  endOfLine: 'auto',
   tailwindConfig: './tailwind.config.js',
   // 对非标准属性进行排序
   tailwindAttributes: ['wrapperClassName', 'wrapClassName', 'rootClassName'],
