@@ -15,25 +15,32 @@ export function LogoSvg() {
         </div>
 
         {/* Screen content */}
-        <div className="absolute inset-3 flex flex-col items-center justify-center overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-primary-foreground">
-          <div className="relative h-32 w-32 md:h-48 md:w-48">
-            <div className="animate-page-turn absolute inset-0">
-              <BookOpen
-                className="h-full w-full text-background"
-                strokeWidth={1.5}
-              />
-            </div>
-            <div className="animate-page-turn animation-delay-300 absolute inset-0">
-              <BookOpen
-                className="h-full w-full text-background opacity-70"
-                strokeWidth={1.5}
-              />
-            </div>
-            <div className="animate-page-turn animation-delay-600 absolute inset-0">
-              <BookOpen
-                className="h-full w-full text-background opacity-40"
-                strokeWidth={1.5}
-              />
+        <div className="absolute inset-3 overflow-hidden rounded-[2.5rem]">
+          <img
+            src="src/assets/img/app_photo3.jpg"
+            alt="App Screenshot"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+            <div className="relative h-32 w-32 md:h-48 md:w-48">
+              <div className="animate-page-turn absolute inset-0">
+                <BookOpen
+                  className="h-full w-full text-background"
+                  strokeWidth={1.5}
+                />
+              </div>
+              <div className="animate-page-turn animation-delay-300 absolute inset-0">
+                <BookOpen
+                  className="h-full w-full text-background opacity-70"
+                  strokeWidth={1.5}
+                />
+              </div>
+              <div className="animate-page-turn animation-delay-600 absolute inset-0">
+                <BookOpen
+                  className="h-full w-full text-background opacity-40"
+                  strokeWidth={1.5}
+                />
+              </div>
             </div>
           </div>
         </div>

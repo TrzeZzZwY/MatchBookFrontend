@@ -252,40 +252,36 @@ export default function Home() {
         </AnimatedSection>
 
         {/* App Showcase Section */}
-        <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-primary to-primary-foreground py-24">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#8A2BE2] to-[#4B0082] py-8 sm:py-12 md:py-16">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent)]" />
-            {/* Add decorative stars */}
-            <div className="absolute left-1/4 top-12 h-2 w-2 animate-pulse bg-white" />
-            <div className="absolute right-1/3 top-24 h-2 w-2 animate-pulse bg-white" />
-            <div className="absolute bottom-32 left-1/3 h-2 w-2 animate-pulse bg-white" />
+            {/* Subtle decorative stars */}
+            <div className="absolute left-1/4 top-12 h-1 w-1 animate-pulse bg-white/50" />
+            <div className="absolute right-1/3 top-24 h-1 w-1 animate-pulse bg-white/30" />
+            <div className="absolute bottom-16 left-1/3 h-1 w-1 animate-pulse bg-white/40" />
           </div>
 
           <div className="container relative mx-auto px-4">
-            <div className="mb-16 text-center text-white">
-              <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+            <div className="mb-6 text-center text-white sm:mb-8 md:mb-10">
+              <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
                 Wiele możliwości
               </h2>
-              <p className="mt-4 animate-pulse text-lg text-white/80 md:text-xl">
+              <p className="mt-2 text-sm text-white/80 sm:text-base md:text-lg">
                 Odkryj wszystkie funkcje naszej aplikacji
               </p>
             </div>
 
-            <div className="relative mx-auto max-w-6xl">
-              <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
+            <div className="relative mx-auto max-w-7xl">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <div
                     key={i}
-                    className={`transform transition-all duration-500 hover:scale-105 ${
-                      i % 2 === 0 ? 'translate-y-8' : '-translate-y-8'
-                    }`}
+                    className="transform transition-all duration-300 hover:z-10 hover:scale-105"
                   >
                     <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/test-5dXmeJr4tZVqPCRgm1urUdNZk4cPXJ.png"
+                      src={`src/assets/img/app_photo${i + 1}.jpg`}
                       alt={`Screen ${i + 1}`}
-                      width={400}
-                      height={800}
-                      className="rounded-2xl shadow-2xl"
+                      className="h-[400px] w-full rounded-lg object-cover object-top shadow-md sm:h-[500px] md:h-[600px]"
                     />
                   </div>
                 ))}
