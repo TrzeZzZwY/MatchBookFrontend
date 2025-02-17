@@ -39,6 +39,7 @@ Aby uruchomić aplikację, wymagane są:
 - **Dane logowania administratora:**
   - **Login:** `admin@matchbook.com`
   - **Hasło:** `1qazXSW@`
+![x](src/assets/screenshots/login.png)
 
 ## Moduły aplikacji
 
@@ -70,6 +71,7 @@ Aby uruchomić aplikację, wymagane są:
   ```typescript
   const authors = await AuthorService.getAuthors({ pageSize: 10, pageNumber: 1 });
   ```
+![x](src/assets/screenshots/authors.png)
 
 ### Zarządzanie książkami
 - Widok `Books.tsx` pozwala na zarządzanie katalogiem książek.
@@ -85,6 +87,7 @@ Aby uruchomić aplikację, wymagane są:
     await BookService.deleteBook(bookId);
   };
   ```
+![x](src/assets/screenshots/books.png)
 
 ### Zarządzanie użytkownikami
 - Widok `Users.tsx` umożliwia wyszukiwanie, filtrowanie i zarządzanie użytkownikami.
@@ -96,6 +99,9 @@ Aby uruchomić aplikację, wymagane są:
   ```typescript
   await UserService.updateStatus(userId, 'BANNED');
   ```
+- Wyświetlanie książek użytkownika
+![x](src/assets/screenshots/users.png)
+
 
 ### Zarządzanie zgłoszeniami (Raporty)
 - Widok `CaseActions.tsx` wyświetla zgłoszenia użytkowników.
@@ -107,6 +113,7 @@ Aby uruchomić aplikację, wymagane są:
   ```typescript
   await CaseActionService.approveCase(caseId);
   ```
+![x](src/assets/screenshots/reports.png)
 
 ## Interfejs użytkownika
 - **Paginacja:** możliwość wyboru liczby elementów na stronę.
